@@ -47,7 +47,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
 
     switch (index) {
       case 0:
-        await Get.to(HomeScreen(initialIndex: index),
+        await Get.to(() => HomeScreen(initialIndex: index),
             transition: Transition.noTransition);
         break;
       case 1:
@@ -58,16 +58,16 @@ class _CustomBottombarState extends State<CustomBottombar> {
         String? password = await SharedPrefHelper.getPassword();
 
         if (studentId != null && password != null) {
-          await Get.to(StudentHomePage(initialIndex: index),
+          await Get.to(() => StudentHomePage(initialIndex: index),
               transition: Transition.noTransition);
         } else {
-          await Get.to(const MultipleUsers(),
-                  transition: Transition.noTransition)
-              ?.then((_) {
+          await Get.to(() => const MultipleUsers(),
+              transition: Transition.noTransition);
+          if (mounted) {
             setState(() {
               _selectedIndex = 0;
             });
-          });
+          }
         }
         break;
     }

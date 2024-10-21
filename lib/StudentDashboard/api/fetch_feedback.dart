@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../Screens/FeedbackPage/model/feedback_class.dart';
+import '../Screens/FeedbackScreen/model/feedback_class.dart';
 import 'util/api_endpoints.dart';
 
 // METHOD: fetch feedback URL by required parameters (studentId, password)

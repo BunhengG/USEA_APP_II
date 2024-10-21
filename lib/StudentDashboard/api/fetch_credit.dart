@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../Screens/HomePage/model/credit_model.dart';
+import '../Screens/StudentHomeScreen/model/credit_model.dart';
 import 'util/api_endpoints.dart';
 
 //METHOD: Function to fetch student credit by required parameters to pass from HomePage

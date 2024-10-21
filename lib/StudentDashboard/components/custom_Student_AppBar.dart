@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:useaapp_version_2/utils/color_builder.dart';
+import 'package:useaapp_version_2/theme/color_builder.dart';
 import '../../../theme/constants.dart';
-import '../../../utils/theme_provider/theme_utils.dart';
-import '../../GuestScreen/NotificationScreen/notification_screen.dart';
+import '../../GuestDashboard/NotificationScreen/notification_screen.dart';
+import '../../theme/theme_provider/theme_utils.dart';
 
 class CustomStudentAppBarMode extends StatefulWidget
     implements PreferredSizeWidget {

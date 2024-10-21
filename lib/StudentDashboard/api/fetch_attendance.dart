@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../Screens/AttendancePage/model/attendance_model.dart';
+import '../Screens/AttendanceScreen/model/attendance_model.dart';
 import 'util/api_endpoints.dart';
 
 // METHOD: fetch student attendance data by required parameters (studentId, password)

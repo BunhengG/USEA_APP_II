@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:useaapp_version_2/utils/color_builder.dart';
+import 'package:useaapp_version_2/theme/color_builder.dart';
 
 import '../../theme/constants.dart';
 import '../../theme/text_style.dart';

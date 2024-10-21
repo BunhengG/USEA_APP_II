@@ -1,4 +1,4 @@
-import '../Screens/SchedulePage/model/schedule_model_class.dart';
+import '../Screens/ScheduleScreen/model/schedule_model_class.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

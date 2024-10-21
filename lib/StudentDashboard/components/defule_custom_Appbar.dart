@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:useaapp_version_2/utils/color_builder.dart';
-import '../../GuestScreen/NotificationScreen/notification_screen.dart';
+import 'package:useaapp_version_2/theme/color_builder.dart';
+import '../../GuestDashboard/NotificationScreen/notification_screen.dart';
 import '../../theme/constants.dart';
 
 class CustomStudentAppBar extends StatelessWidget

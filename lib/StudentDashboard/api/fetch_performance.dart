@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../Screens/PerformancePage/model/performance_model.dart';
+import '../Screens/PerformanceScreen/model/performance_model.dart';
 import 'util/api_endpoints.dart';
 
 // METHOD: fetch student performance data by required parameters (studentId, password)

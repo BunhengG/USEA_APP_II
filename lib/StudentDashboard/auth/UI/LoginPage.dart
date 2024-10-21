@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:useaapp_version_2/GuestScreen/components/multi_Appbar.dart';
+import 'package:useaapp_version_2/components/multi_Appbar.dart';
 
 import '../../../theme/constants.dart';
 import '../../../theme/text_style.dart';
-import '../../Screens/HomePage/UI/HomePage.dart';
+import '../../Screens/StudentHomeScreen/UI/HomePage.dart';
 import '../bloc/login_bloc.dart';
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';

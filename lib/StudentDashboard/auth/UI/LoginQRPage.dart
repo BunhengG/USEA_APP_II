@@ -2,7 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:useaapp_version_2/StudentDashboard/Screens/HomePage/UI/HomePage.dart';
+import 'package:useaapp_version_2/StudentDashboard/Screens/StudentHomeScreen/UI/HomePage.dart';
 import '../../api/fetch_user.dart';
 import '../../helpers/shared_pref_helper.dart';
 

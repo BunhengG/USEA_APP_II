@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../../api/api_domain.dart';
+import '../../../utils/api_domain.dart';
 
 class ApiService {
   static Future<List<dynamic>> fetchRecognitions() async {

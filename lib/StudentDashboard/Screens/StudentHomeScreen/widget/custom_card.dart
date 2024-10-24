@@ -166,10 +166,13 @@ class CustomCard extends StatelessWidget {
                                   child: Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 2.0.r),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.circle,
                                       size: 18,
-                                      color: Color(0xFFF3C623),
+                                      color: yourCredit.toInt() ==
+                                              totalCredit.toInt()
+                                          ? const Color(0xFF00FF9C)
+                                          : const Color(0xFFF3C623),
                                     ),
                                   ),
                                 ),
@@ -210,9 +213,11 @@ class CustomCard extends StatelessWidget {
                 ),
                 Text(
                   '${yourCredit.toInt()}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFFF3C623),
+                    color: yourCredit.toInt() == totalCredit.toInt()
+                        ? const Color(0xFF00FF9C)
+                        : const Color(0xFFF3C623),
                     fontSize: 16,
                   ),
                 )

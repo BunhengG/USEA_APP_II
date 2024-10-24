@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
       autoCloseDuration: const Duration(milliseconds: 500),
       showConfirmBtn: false,
     ).then((_) {
-      Future.delayed(const Duration(milliseconds: 600), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         _navigateToHomePage(context);
       });
     });
@@ -208,17 +208,20 @@ class _LoginPageState extends State<LoginPage> {
           child: TextField(
             controller: _usernameController,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.r),
               hintText: '\t\tបញ្ចូលអត្តលេខ\t'.tr,
               hintStyle: getBodyMediumTextStyle()
                   .copyWith(fontWeight: FontWeight.normal),
               enabledBorder: _buildInputBorder(_usernameBorderColor),
               focusedBorder: _buildInputBorder(
-                  _isUsernameValid ? cl_PrimaryColor : Colors.red),
+                _isUsernameValid ? cl_PrimaryColor : Colors.red,
+              ),
               errorBorder: _buildInputBorder(Colors.red),
               errorStyle: const TextStyle(height: 0),
-              suffixIcon:
-                  _buildClearButton(_usernameController, _isUsernameValid),
+              suffixIcon: _buildClearButton(
+                _usernameController,
+                _isUsernameValid,
+              ),
             ),
             onChanged: (value) {
               setState(() {

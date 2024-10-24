@@ -1,8 +1,11 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:useaapp_version_2/StudentDashboard/Screens/StudentHomeScreen/UI/HomePage.dart';
+import 'package:useaapp_version_2/theme/constants.dart';
 import '../../api/fetch_user.dart';
 import '../../helpers/shared_pref_helper.dart';
 
@@ -62,7 +65,7 @@ class _LoginQRPageState extends State<LoginQRPage>
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
         overlayColor: Colors.black.withOpacity(0.5),
-        borderColor: Colors.white,
+        borderColor: cl_ThirdColor,
         borderRadius: 16,
         borderLength: 32,
         borderWidth: 8,
@@ -88,25 +91,24 @@ class _LoginQRPageState extends State<LoginQRPage>
   }
 
   Widget _buildCornerBorder(int index) {
-    final BorderSide borderSide =
-        const BorderSide(width: 5, color: Colors.white);
+    const BorderSide borderSide = BorderSide(width: 5, color: cl_ThirdColor);
     BorderRadius borderRadius;
     Alignment alignment;
 
     switch (index) {
-      case 0: // Top-left
+      case 0: //* Top-left
         borderRadius = const BorderRadius.only(topLeft: Radius.circular(16));
         alignment = Alignment.topLeft;
         break;
-      case 1: // Top-right
+      case 1: //* Top-right
         borderRadius = const BorderRadius.only(topRight: Radius.circular(16));
         alignment = Alignment.topRight;
         break;
-      case 2: // Bottom-left
+      case 2: //* Bottom-left
         borderRadius = const BorderRadius.only(bottomLeft: Radius.circular(16));
         alignment = Alignment.bottomLeft;
         break;
-      case 3: // Bottom-right
+      case 3: //* Bottom-right
       default:
         borderRadius =
             const BorderRadius.only(bottomRight: Radius.circular(16));
@@ -144,15 +146,15 @@ class _LoginQRPageState extends State<LoginQRPage>
           IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: Colors.white,
+              color: cl_ThirdColor,
               size: 24,
             ),
             onPressed: () => Navigator.pop(context),
           ),
-          const Text(
-            'Back',
-            style: TextStyle(
-              color: Colors.white,
+          Text(
+            'គណនីនិស្សិត'.tr,
+            style: const TextStyle(
+              color: cl_ThirdColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -172,7 +174,7 @@ class _LoginQRPageState extends State<LoginQRPage>
           "Scan QR Code",
           style: TextStyle(
             fontSize: 24,
-            color: Colors.white,
+            color: cl_ThirdColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -185,19 +187,19 @@ class _LoginQRPageState extends State<LoginQRPage>
       bottom: (MediaQuery.of(context).size.height -
                   (MediaQuery.of(context).size.width * 0.7)) /
               2 -
-          150.h,
+          120.h,
       left: (MediaQuery.of(context).size.width / 2) - 40.w,
       child: Container(
-        width: 80.w,
-        height: 80.h,
+        width: 60.w,
+        height: 60.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: _isFlashOn ? Colors.white : Colors.white60,
+          borderRadius: BorderRadius.circular(rd_FullRounded),
+          color: _isFlashOn ? cl_ThirdColor : Colors.white60,
         ),
         child: IconButton(
           icon: Image.asset(
             'assets/img/flashlight.png',
-            scale: 10,
+            scale: 12,
           ),
           onPressed: _toggleFlash,
         ),
@@ -224,7 +226,7 @@ class _LoginQRPageState extends State<LoginQRPage>
                   child: Container(
                     height: 3,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: cl_ThirdColor,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     transform: Matrix4.translationValues(
@@ -246,7 +248,9 @@ class _LoginQRPageState extends State<LoginQRPage>
     setState(() {
       this.controller = controller;
     });
-    Future.delayed(const Duration(milliseconds: 500));
+
+    // Removed the Future.delayed since it was not being used.
+
     controller.scannedDataStream.listen((scanData) async {
       if (mounted) {
         setState(() {
@@ -259,7 +263,7 @@ class _LoginQRPageState extends State<LoginQRPage>
 
   Future<void> _loginWithQRCode() async {
     if (result != null) {
-      final data = result!.code?.split(':');
+      final data = result?.code?.split(':');
       if (data != null && data.length == 2) {
         final studentId = data[0];
         final password = data[1];
@@ -294,54 +298,58 @@ class _LoginQRPageState extends State<LoginQRPage>
         );
         await SharedPrefHelper.saveUserData(studentUser, userData);
 
-        _showSuccessSnackbar('Login Successful');
-        _navigateToHomePage();
+        _showSuccessDialog(context);
+        // _navigateToHomePage();
       } else {
-        _showSnackbar('Login failed. Please check your credentials.');
+        _showSnackbar(
+            'Login failed. Please check your credentials or network connection.');
       }
     }
   }
 
   void _navigateToHomePage() {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) =>
-              const StudentHomePage(initialIndex: 2),
-          transitionDuration: const Duration(milliseconds: 300),
-          transitionsBuilder: (context, anim, secondaryAnim, child) {
-            return FadeTransition(opacity: anim, child: child);
-          },
-        ),
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const StudentHomePage(initialIndex: 2),
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, anim, secondaryAnim, child) {
+          return FadeTransition(opacity: anim, child: child);
+        },
+      ),
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    if (!_isDialogShown) {
+      _isDialogShown = true;
+
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: 'Success',
+        text: 'You have successfully logged in!',
+        autoCloseDuration: const Duration(seconds: 1),
+        showConfirmBtn: false,
       );
-    });
+
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          _isDialogShown = false;
+          _navigateToHomePage();
+        }
+      });
+    }
   }
 
-  void _showSuccessSnackbar(String message) {
-    _showSnackbar(message, contentType: ContentType.success, title: 'Success');
-  }
-
-  void _showSnackbar(String message,
-      {ContentType contentType = ContentType.failure,
-      String title = 'Login Failed'}) {
+  void _showSnackbar(String message) {
     if (!_isDialogShown) {
       setState(() {
         _isDialogShown = true;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: title,
-            message: message,
-            contentType: contentType,
-          ),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      _showErrorSnackBar(context, message);
 
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
@@ -351,6 +359,15 @@ class _LoginQRPageState extends State<LoginQRPage>
         }
       });
     }
+  }
+
+  void _showErrorSnackBar(BuildContext context, String message) {
+    AnimatedSnackBar.material(
+      message,
+      type: AnimatedSnackBarType.error,
+      duration: const Duration(seconds: 2),
+      mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+    ).show(context);
   }
 
   Future<void> _toggleFlash() async {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import '../../../api/api_domain.dart';
+import '../../../utils/api_domain.dart';
 
 class ApiService {
   Future<List<dynamic>?> fetchData() async {

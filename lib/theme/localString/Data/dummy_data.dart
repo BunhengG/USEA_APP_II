@@ -13,46 +13,30 @@ final List<Map<String, String>> gridItems = [
 ];
 
 //! About List Title
-// final List<Map<String, String>> aboutList = [
-//   {
-//     "title": "ប្រវត្តិ និងអត្ថន័យរបស់និមិត្តសញ្ញា".tr,
-//     "icon": "assets/icon/about1.png"
-//   },
-//   {
-//     "title": "រចនាសម្ព័ន្ធរបស់សាកលវិទ្យាល័យ".tr,
-//     "icon": "assets/icon/about2.png"
-//   },
-//   {"title": "សាររបស់សាកលវិទ្យាធិការ".tr, "icon": "assets/icon/about3.png"},
-//   {
-//     "title": "ចក្ខុវិស័យ បេសកកម្ម និងគុណតម្លៃ".tr,
-//     "icon": "assets/icon/about4.png"
-//   },
-//   {"title": "ការទទួលស្គាល់".tr, "icon": "assets/icon/about5.png"},
-// ];
 
 final List<Map<String, String>> aboutList = [
   {
-    "title": "ប្រវត្តិ និងអត្ថន័យរបស់និមិត្តសញ្ញា".tr,
+    "title": "ប្រវត្តិ និងអត្ថន័យរបស់និមិត្តសញ្ញា",
     "icon":
         "https://drive.google.com/uc?export=view&id=1m_uZ6t6h8-36e54HG_t8wNPHLhRkyi7Y"
   },
   {
-    "title": "រចនាសម្ព័ន្ធរបស់សាកលវិទ្យាល័យ".tr,
+    "title": "រចនាសម្ព័ន្ធរបស់សាកលវិទ្យាល័យ",
     "icon":
         "https://drive.google.com/uc?export=view&id=1BBPo5pHZp_aK7G0MXWBRV9Jq8b4OaI5T"
   },
   {
-    "title": "សាររបស់សាកលវិទ្យាធិការ".tr,
+    "title": "សាររបស់សាកលវិទ្យាធិការ",
     "icon":
         "https://drive.google.com/uc?export=view&id=1AUiUCNmOLWKr_O9jzI2NVZNCE9VFxjjR"
   },
   {
-    "title": "ចក្ខុវិស័យ បេសកកម្ម និងគុណតម្លៃ".tr,
+    "title": "ចក្ខុវិស័យ បេសកកម្ម និងគុណតម្លៃ",
     "icon":
         "https://drive.google.com/uc?export=view&id=1dyOcoRDZuhiMhpyyNZJsimibtE2DOF89"
   },
   {
-    "title": "ការទទួលស្គាល់".tr,
+    "title": "ការទទួលស្គាល់",
     "icon":
         "https://drive.google.com/uc?export=view&id=1y8UkDEuaOzki_RIWw6fO94p4nHmoz9ZO"
   },

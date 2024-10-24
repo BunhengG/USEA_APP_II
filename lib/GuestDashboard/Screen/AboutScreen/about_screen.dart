@@ -83,7 +83,7 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MultiAppBar(
-        title: 'អំពីយើង',
+        title: 'អំពីយើង'.tr,
         onBackButtonPressed: () {
           Navigator.pop(context);
         },

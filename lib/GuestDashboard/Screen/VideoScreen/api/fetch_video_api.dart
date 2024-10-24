@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import '../../../api/api_domain.dart';
+import '../../../utils/api_domain.dart';
 import '../model/video_model.dart';
 
 class ApiService {

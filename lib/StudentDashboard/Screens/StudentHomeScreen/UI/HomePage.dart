@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:useaapp_version_2/theme/color_builder.dart';
 
 import '../../../../components/circularProgressIndicator.dart';
 import '../../../../components/custom_Bottombar.dart';
@@ -178,7 +179,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                             creditData: creditData!,
                           )
                         else
-                          buildPlaceholderCard(),
+                          buildPlaceholderCard(context, colorMode),
                         const SizedBox(height: 16),
                         const CustomGridView(),
                       ],
@@ -193,15 +194,16 @@ class _StudentHomePageState extends State<StudentHomePage> {
     );
   }
 
-  Widget buildPlaceholderCard() => Container(
+  Widget buildPlaceholderCard(BuildContext context, bool colorMode) =>
+      Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: cl_ThirdColor,
+            color: colorMode ? Colors.transparent : cl_ThirdColor,
             width: 1.5,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
           borderRadius: BorderRadius.circular(rd_LargeRounded),
-          color: cl_ItemBackgroundColor,
+          color: context.colorDarkMode,
         ),
         child: Center(
           child: LottieBuilder.asset(

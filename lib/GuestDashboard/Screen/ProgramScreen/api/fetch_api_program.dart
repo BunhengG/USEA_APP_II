@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import '../../../api/api_domain.dart';
+import '../../../utils/api_domain.dart';
 import '../models/acca_Models.dart';
 
 class ApiService {

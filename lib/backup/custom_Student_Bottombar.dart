@@ -41,7 +41,10 @@ class _CustomStudentBottomBarState extends State<CustomStudentBottomBar> {
         await Navigator.push(
           context,
           SwipeablePageRoute(
-            builder: (context) => HomeScreen(initialIndex: index),
+            builder: (context) => HomeScreen(
+              initialIndex: index,
+              currentIndex: 0,
+            ),
           ),
         );
         break;

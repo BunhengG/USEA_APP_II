@@ -28,8 +28,8 @@ class CustomCard extends StatelessWidget {
     double yourCredit = double.tryParse(creditData.yourCredit) ?? 0.0;
     double percentage = totalCredit > 0 ? (yourCredit / totalCredit) : 0.0;
 
-    double cardHeight = MediaQuery.of(context).size.height * 0.3;
-    double avatarSize = MediaQuery.of(context).size.width * 0.12;
+    double cardHeight = MediaQuery.of(context).size.height * 0.28.h;
+    double avatarSize = MediaQuery.of(context).size.width * 0.14.w;
 
     return Stack(
       children: [
@@ -39,7 +39,7 @@ class CustomCard extends StatelessWidget {
           child: Stack(
             children: [
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(12.0.r),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(rd_MediumRounded),
                   color: context.colorDarkMode,
@@ -55,7 +55,7 @@ class CustomCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         InkWell(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(rd_FullRounded),
                           onTap: () {
                             Navigator.push(
                               context,
@@ -90,10 +90,11 @@ class CustomCard extends StatelessWidget {
                                                   userData.profilePic !=
                                                       'http://116.212.155.149:9999/usea/studentsimg/noimage.png')
                                               ? NetworkImage(
-                                                  userData.profilePic)
+                                                  userData.profilePic,
+                                                )
                                               : const AssetImage(
-                                                      'assets/img/avator_palceholder.png')
-                                                  as ImageProvider,
+                                                  'assets/img/avator_palceholder.png',
+                                                ) as ImageProvider,
                                         ),
                                       ),
                                     ),
@@ -109,7 +110,8 @@ class CustomCard extends StatelessWidget {
                                     style:
                                         getTitleKhmerMoolPrimaryColorTextStyle()
                                             .copyWith(
-                                                color: context.titleColor),
+                                      color: context.titleColor,
+                                    ),
                                   ),
                                   Text(
                                     userData.nameEn.toUpperCase(),
@@ -127,10 +129,9 @@ class CustomCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 4.h),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.12, // Responsive height for content
+                      height: MediaQuery.of(context).size.height * 0.12.h,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,11 +139,11 @@ class CustomCard extends StatelessWidget {
                           Text.rich(
                             TextSpan(
                               children: [
-                                const WidgetSpan(
+                                WidgetSpan(
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
+                                        EdgeInsets.symmetric(horizontal: 2.0.r),
+                                    child: const Icon(
                                       Icons.circle,
                                       size: 18,
                                       color: Color(0xFFF4F6FF),
@@ -161,14 +162,14 @@ class CustomCard extends StatelessWidget {
                           Text.rich(
                             TextSpan(
                               children: [
-                                const WidgetSpan(
+                                WidgetSpan(
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
+                                        EdgeInsets.symmetric(horizontal: 2.0.r),
+                                    child: const Icon(
                                       Icons.circle,
                                       size: 18,
-                                      color: Color(0xFF4379F2),
+                                      color: Color(0xFFF3C623),
                                     ),
                                   ),
                                 ),
@@ -183,7 +184,6 @@ class CustomCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16.h),
                   ],
                 ),
               ),
@@ -191,8 +191,8 @@ class CustomCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: cardHeight * 0.3,
-          right: 18.sp,
+          top: cardHeight * 0.35.h,
+          right: 16.r,
           child: CircularPercentIndicator(
             radius: 65.0,
             lineWidth: 18.0,
@@ -212,7 +212,7 @@ class CustomCard extends StatelessWidget {
                   '${yourCredit.toInt()}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF4379F2),
+                    color: Color(0xFFF3C623),
                     fontSize: 16,
                   ),
                 )
@@ -222,7 +222,9 @@ class CustomCard extends StatelessWidget {
             arcType: ArcType.FULL,
             arcBackgroundColor: const Color(0xFFF4F6FF),
             backgroundColor: const Color(0xFFF4F6FF),
-            progressColor: const Color(0xFF4379F2),
+            progressColor: yourCredit.toInt() == totalCredit.toInt()
+                ? const Color(0xFF00FF9C)
+                : const Color(0xFFF3C623),
           ),
         ),
       ],

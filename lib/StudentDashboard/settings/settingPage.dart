@@ -70,7 +70,10 @@ Future<void> _logout(BuildContext context) async {
         // Navigate to the HomeScreen after the delay
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(
+              builder: (context) => const HomeScreen(
+                    currentIndex: 0,
+                  )),
           (Route<dynamic> route) => false,
         );
       });

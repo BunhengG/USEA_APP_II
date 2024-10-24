@@ -1,8 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:useaapp_version_2/theme/background.dart';
 import 'package:useaapp_version_2/theme/color_builder.dart';
 import '../../../../../components/circularProgressIndicator.dart';
@@ -76,11 +79,13 @@ class AttendanceView extends StatefulWidget {
 class _AttendanceViewState extends State<AttendanceView> {
   UserData? userData;
   bool _isLoading = true;
+  bool _isConnected = true;
 
   @override
   void initState() {
     super.initState();
     _initializeData();
+    _checkConnectivity();
   }
 
   // Initialize and load the user data
@@ -88,250 +93,292 @@ class _AttendanceViewState extends State<AttendanceView> {
     userData = await SharedPrefHelper.getStoredUserData();
   }
 
+  Future<void> _checkConnectivity() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = (result != ConnectivityResult.none);
+    });
+
+    // Listen to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorMode = isDarkMode(context);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        titleSpacing: 5,
-        elevation: 0.0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(color: context.appBarColor),
+      appBar: _buildAppBar(context),
+      body: _isConnected
+          ? _buildAttendancePageContent(context, colorMode)
+          : _buildNoInternetUI(context, colorMode),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.transparent,
+      titleSpacing: 5,
+      elevation: 0.0,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(color: context.appBarColor),
+      ),
+      title: Text(
+        'វត្តមាន'.tr,
+        style: getTitleMediumTextStyle(),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ),
+      leading: IconButton(
+        icon: const FaIcon(
+          FontAwesomeIcons.angleLeft,
+          color: cl_ThirdColor,
+          size: 22,
         ),
-        title: Text(
-          'វត្តមាន'.tr,
-          style: getTitleMediumTextStyle(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          softWrap: false,
-        ),
-        leading: IconButton(
-          icon: const FaIcon(
-            FontAwesomeIcons.angleLeft,
-            color: cl_ThirdColor,
-            size: 22,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      actions: [
+        TextButton(
+          onPressed: _viewAllAttendances,
+          child: Text(
+            'មើលទាំងអស់'.tr,
+            style: getTitleMediumTextStyle(),
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
+        ),
+      ],
+    );
+  }
+
+  void _viewAllAttendances() {
+    final attendanceState = BlocProvider.of<AttendanceBloc>(context).state;
+    if (attendanceState is AttendanceLoaded) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CheckAllAttendancePage(
+            attendances: attendanceState.attendances,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No attendance data available.'),
+        ),
+      );
+    }
+  }
+
+  Widget _buildAttendancePageContent(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        BlocBuilder<AttendanceBloc, AttendanceState>(
+          builder: (context, state) {
+            if (state is AttendanceLoading) {
+              return const AttendanceShimmer(
+                height: 40,
+                width: double.infinity,
+              );
+            } else if (state is AttendanceError) {
+              return Center(child: Text('Error: ${state.message}'));
+            } else if (state is AttendanceLoaded) {
+              if (_isLoading) {
+                //NOTE: Delay for 1 seconds before showing the data
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                });
+                return const Center(
+                  child: AttendanceShimmer(
+                    height: 40,
+                    width: double.infinity,
+                  ),
+                );
+              }
+
+              final attendances = state.attendances;
+              final filteredSubjects = _filterSubjects(attendances);
+
+              if (filteredSubjects.isEmpty) {
+                return const Center(
+                  child:
+                      Text('No subjects found for current year and semester.'),
+                );
+              }
+
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildTabView(
+                            "យឺត",
+                            Icons.circle,
+                            const Color(0xFF003EDD),
+                          ),
+                          _buildTabView(
+                            "សុំច្បាប់",
+                            Icons.circle,
+                            const Color(0xFFEA6930),
+                          ),
+                          _buildTabView(
+                            "អវត្តមាន",
+                            Icons.circle,
+                            const Color(0xFEC61B12),
+                          ),
+                          _buildTabView(
+                            "វត្តមាន\t",
+                            Icons.circle,
+                            const Color(0xFE4DC739),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: filteredSubjects.length,
+                      itemBuilder: (context, index) {
+                        final subject = filteredSubjects[index];
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AttendanceDetailsPage(subject: subject),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: context.listViewDarkMode,
+                                boxShadow: const [sd_BoxShadow],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            subject.name,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                getTitleMediumPrimaryColorTextStyle()
+                                                    .copyWith(
+                                              color: context.titlePrimaryColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            '${subject.credit}${'\tក្រេឌីត\t'.tr}${subject.hour}${'\tម៉ោង'.tr}',
+                                            style: getBodyMediumTextStyle()
+                                                .copyWith(
+                                              color: context.textDecColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: GridView.count(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 1,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        children: [
+                                          _buildGridItem(subject.attendanceA,
+                                              valueColor:
+                                                  const Color(0xFFC61B12)),
+                                          _buildGridItem(subject.attendancePm,
+                                              valueColor:
+                                                  const Color(0xFFEA6930)),
+                                          _buildGridItem(subject.attendanceAl,
+                                              valueColor:
+                                                  const Color(0xFF003EDD)),
+                                          _buildGridItem(subject.attendancePs,
+                                              valueColor:
+                                                  const Color(0xFF4DC739)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const Center(child: Text('No attendance data found'));
           },
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              final attendanceState =
-                  BlocProvider.of<AttendanceBloc>(context).state;
-              if (attendanceState is AttendanceLoaded) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CheckAllAttendancePage(
-                      attendances: attendanceState.attendances,
-                    ),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('No attendance data available.'),
-                  ),
-                );
-              }
-            },
-            child: Text(
-              'មើលទាំងអស់'.tr,
-              style: getTitleMediumTextStyle(),
-            ),
+      ],
+    );
+  }
+
+  Widget _buildNoInternetUI(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LottieBuilder.asset(
+                'assets/icon/no_internet_icon.json',
+                width: 160,
+              ),
+              Text(
+                'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
+                style: getTitleSmallTextStyle(),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Container(
-          //   width: double.infinity,
-          //   decoration: const BoxDecoration(
-          //     gradient: u_BackgroundScaffold,
-          //   ),
-          // ),
-          BackgroundContainer(isDarkMode: colorMode),
-          BlocBuilder<AttendanceBloc, AttendanceState>(
-            builder: (context, state) {
-              if (state is AttendanceLoading) {
-                return const AttendanceShimmer(
-                  height: 40,
-                  width: double.infinity,
-                );
-              } else if (state is AttendanceError) {
-                return Center(child: Text('Error: ${state.message}'));
-              } else if (state is AttendanceLoaded) {
-                if (_isLoading) {
-                  //NOTE: Delay for 1 seconds before showing the data
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  });
-                  return const Center(
-                    child: AttendanceShimmer(
-                      height: 40,
-                      width: double.infinity,
-                    ),
-                  );
-                }
-
-                final attendances = state.attendances;
-                final filteredSubjects = _filterSubjects(attendances);
-
-                if (filteredSubjects.isEmpty) {
-                  return const Center(
-                    child: Text(
-                        'No subjects found for current year and semester.'),
-                  );
-                }
-
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildTabView(
-                              "យឺត",
-                              Icons.circle,
-                              const Color(0xFF003EDD),
-                            ),
-                            _buildTabView(
-                              "សុំច្បាប់",
-                              Icons.circle,
-                              const Color(0xFFEA6930),
-                            ),
-                            _buildTabView(
-                              "អវត្តមាន",
-                              Icons.circle,
-                              const Color(0xFEC61B12),
-                            ),
-                            _buildTabView(
-                              "វត្តមាន\t",
-                              Icons.circle,
-                              const Color(0xFE4DC739),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: filteredSubjects.length,
-                        itemBuilder: (context, index) {
-                          final subject = filteredSubjects[index];
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(16),
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AttendanceDetailsPage(subject: subject),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 8,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: context.listViewDarkMode,
-                                  boxShadow: const [sd_BoxShadow],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              subject.name,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style:
-                                                  getTitleMediumPrimaryColorTextStyle()
-                                                      .copyWith(
-                                                color:
-                                                    context.titlePrimaryColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              '${subject.credit}${'\tក្រេឌីត\t'.tr}${subject.hour}${'\tម៉ោង'.tr}',
-                                              style: getBodyMediumTextStyle()
-                                                  .copyWith(
-                                                color: context.textDecColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      SizedBox(
-                                        width: 60,
-                                        height: 60,
-                                        child: GridView.count(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 1,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          children: [
-                                            _buildGridItem(subject.attendanceA,
-                                                valueColor:
-                                                    const Color(0xFFC61B12)),
-                                            _buildGridItem(subject.attendancePm,
-                                                valueColor:
-                                                    const Color(0xFFEA6930)),
-                                            _buildGridItem(subject.attendanceAl,
-                                                valueColor:
-                                                    const Color(0xFF003EDD)),
-                                            _buildGridItem(subject.attendancePs,
-                                                valueColor:
-                                                    const Color(0xFF4DC739)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return const Center(child: Text('No attendance data found'));
-            },
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

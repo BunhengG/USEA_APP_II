@@ -1,7 +1,7 @@
 // home_state.dart
 import 'package:equatable/equatable.dart';
-import '../../../auth/model/login_model_class.dart';
-import '../model/credit_model.dart';
+import '../../../StudentDashboard/auth/model/login_model_class.dart';
+import '../../../StudentDashboard/Screens/StudentHomeScreen/model/credit_model.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -13,6 +13,11 @@ abstract class HomeState extends Equatable {
 class HomeInitial extends HomeState {}
 
 class HomeLoading extends HomeState {}
+
+// Add these states for connectivity
+class ConnectivitySuccess extends HomeState {}
+
+class ConnectivityFailure extends HomeState {}
 
 class HomeLoaded extends HomeState {
   final UserData userData;

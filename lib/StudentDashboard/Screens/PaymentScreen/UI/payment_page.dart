@@ -1,9 +1,12 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:useaapp_version_2/StudentDashboard/components/custom_Student_Multi_Appbar.dart';
 import 'package:useaapp_version_2/theme/color_builder.dart';
+import '../../../../theme/background.dart';
 import '../../../../theme/constants.dart';
 import '../../../../theme/text_style.dart';
 import '../../../../theme/theme_provider/theme_provider.dart';
@@ -39,6 +42,27 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   bool _isLoading = true;
+  bool _isConnected = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkConnectivity();
+  }
+
+  Future<void> _checkConnectivity() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = (result != ConnectivityResult.none);
+    });
+
+    // Listen to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,45 +77,75 @@ class _PaymentPageState extends State<PaymentPage> {
             Navigator.of(context).pop();
           },
         ),
-        body: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              color: colorMode ? cl_DefaultDark_Mode : cl_ThirdColor,
-            ),
-            BlocBuilder<PaymentBloc, PaymentState>(
-              builder: (context, state) {
-                if (state is PaymentLoading) {
-                  return const Center(child: PaymentShimmer());
-                } else if (state is PaymentError) {
-                  return Center(child: Text('Error: ${state.message}'));
-                } else if (state is PaymentLoaded) {
-                  if (_isLoading) {
-                    Future.delayed(
-                      const Duration(milliseconds: 500),
+        body: _isConnected
+            ? _buildPaymentContent(context, colorMode)
+            : _buildNoInternetUI(context, colorMode),
+      ),
+    );
+  }
+
+  Widget _buildPaymentContent(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          color: colorMode ? cl_DefaultDark_Mode : cl_ThirdColor,
+        ),
+        BlocBuilder<PaymentBloc, PaymentState>(
+          builder: (context, state) {
+            if (state is PaymentLoading) {
+              return const Center(child: PaymentShimmer());
+            } else if (state is PaymentError) {
+              return Center(child: Text('Error: ${state.message}'));
+            } else if (state is PaymentLoaded) {
+              if (_isLoading) {
+                Future.delayed(
+                  const Duration(milliseconds: 500),
+                  () {
+                    setState(
                       () {
-                        setState(
-                          () {
-                            _isLoading = false;
-                          },
-                        );
+                        _isLoading = false;
                       },
                     );
-                    return const Center(child: PaymentShimmer());
-                  }
+                  },
+                );
+                return const Center(child: PaymentShimmer());
+              }
 
-                  return _buildPaymentList(
-                    state.paymentData,
-                    state.otherPaymentData,
-                  );
-                } else {
-                  return const Center(child: Text('No payment data available'));
-                }
-              },
-            ),
-          ],
+              return _buildPaymentList(
+                state.paymentData,
+                state.otherPaymentData,
+              );
+            } else {
+              return const Center(child: Text('No payment data available'));
+            }
+          },
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _buildNoInternetUI(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LottieBuilder.asset(
+                'assets/icon/no_internet_icon.json',
+                width: 160,
+              ),
+              Text(
+                'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
+                style: getTitleSmallTextStyle(),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

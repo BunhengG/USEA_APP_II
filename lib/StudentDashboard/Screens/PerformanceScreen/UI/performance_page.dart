@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:useaapp_version_2/StudentDashboard/components/custom_Student_Multi_Appbar.dart';
 import 'package:useaapp_version_2/theme/background.dart';
 import 'package:useaapp_version_2/theme/color_builder.dart';
@@ -42,6 +44,33 @@ class _PerformanceViewState extends State<PerformanceView>
     with TickerProviderStateMixin {
   TabController? _tabController;
   bool _isLoading = true;
+  bool _isConnected = true;
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkConnectivity();
+  }
+
+  Future<void> _checkConnectivity() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = (result != ConnectivityResult.none);
+    });
+
+    // Listen to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,23 +84,23 @@ class _PerformanceViewState extends State<PerformanceView>
           Navigator.of(context).pop();
         },
       ),
-      body: Stack(
-        children: [
-          // Container(
-          //   width: double.infinity,
-          //   decoration: const BoxDecoration(
-          //     gradient: u_BackgroundScaffold,
-          //   ),
-          // ),
+      body: _isConnected
+          ? _buildPerformanceContent(context, colorMode)
+          : _buildNoInternetUI(context, colorMode),
+    );
+  }
 
-          BackgroundContainer(isDarkMode: colorMode),
-          BlocBuilder<PerformanceBloc, PerformanceState>(
-            builder: (context, state) {
-              if (state is PerformanceLoading) {
-                return const Center(child: CustomShimmerPerformancePage());
-              } else if (state is PerformanceError) {
-                return Center(
-                    child: Column(
+  Widget _buildPerformanceContent(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        BlocBuilder<PerformanceBloc, PerformanceState>(
+          builder: (context, state) {
+            if (state is PerformanceLoading) {
+              return const Center(child: CustomShimmerPerformancePage());
+            } else if (state is PerformanceError) {
+              return Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -79,7 +108,6 @@ class _PerformanceViewState extends State<PerformanceView>
                       'assets/icon/empty.png',
                       width: 120.w,
                     ),
-                    // Text('Error: ${state.message}'),
                     Text(
                       'Something went wrong. We will back soon.',
                       style: getTitleSmallTextStyle().copyWith(
@@ -87,95 +115,120 @@ class _PerformanceViewState extends State<PerformanceView>
                       ),
                     ),
                   ],
-                ));
-              } else if (state is PerformanceLoaded) {
-                if (_isLoading) {
-                  //NOTE: Delay for 1 seconds before showing the data
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  });
-                  return const Center(child: CustomShimmerPerformancePage());
-                }
-
-                final data = state.performances;
-                _tabController ??=
-                    TabController(length: data.length, vsync: this);
-
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    //COMMENT: ******************************** TabBar Header ********************************
-                    ButtonsTabBar(
-                      buttonMargin: const EdgeInsets.only(
-                        left: 16,
-                        top: 4,
-                        bottom: 4,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      controller: _tabController,
-                      backgroundColor: context.secondaryForTabBarColoDarkMode,
-                      borderColor: cl_ThirdColor,
-                      borderWidth: 1.2,
-                      unselectedBackgroundColor: context.colorDarkMode,
-                      labelStyle: const TextStyle(
-                        color: cl_ThirdColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      contentCenter: true,
-                      unselectedLabelStyle: const TextStyle(
-                        color: cl_ItemBackgroundColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      unselectedBorderColor: cl_ItemBackgroundColor,
-                      radius: 8,
-                      height: 60.h,
-                      width: 140.w,
-                      tabs: [
-                        for (int i = 0; i < data.length; i++)
-                          Tab(text: 'ឆ្នាំទី​ '.tr + intToRoman(i + 1)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    //COMMENT: ******************************** TabBar Content ********************************
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          for (int i = 0; i < data.length; i++)
-                            _buildYearTab(data[i]),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                  ],
-                );
-              }
-              return Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/icon/empty.png',
-                      width: 120.w,
-                    ),
-                    Text(
-                      'No Data.',
-                      style: getTitleSmallTextStyle().copyWith(
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ],
                 ),
               );
-            },
+            } else if (state is PerformanceLoaded) {
+              if (_isLoading) {
+                //NOTE: Delay for 1 seconds before showing the data
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                });
+                return const Center(child: CustomShimmerPerformancePage());
+              }
+
+              final data = state.performances;
+              _tabController ??= TabController(
+                length: data.length,
+                vsync: this,
+              );
+
+              return Column(
+                children: [
+                  SizedBox(height: 16.r),
+                  //COMMENT: ******************************** TabBar Header ********************************
+                  ButtonsTabBar(
+                    buttonMargin: const EdgeInsets.only(
+                      left: 16,
+                      top: 4,
+                      bottom: 4,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    controller: _tabController,
+                    backgroundColor: context.secondaryForTabBarColoDarkMode,
+                    borderColor: cl_ThirdColor,
+                    borderWidth: 1.2,
+                    unselectedBackgroundColor: context.colorDarkMode,
+                    labelStyle: const TextStyle(
+                      color: cl_ThirdColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    contentCenter: true,
+                    unselectedLabelStyle: const TextStyle(
+                      color: cl_ItemBackgroundColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    unselectedBorderColor: cl_ItemBackgroundColor,
+                    radius: 8,
+                    height: 60.h,
+                    width: 140.w,
+                    tabs: [
+                      for (int i = 0; i < data.length; i++)
+                        Tab(text: 'ឆ្នាំទី​ '.tr + intToRoman(i + 1)),
+                    ],
+                  ),
+                  SizedBox(height: 8.r),
+                  //COMMENT: ******************************** TabBar Content ********************************
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        for (int i = 0; i < data.length; i++)
+                          _buildYearTab(data[i]),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Center(
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/icon/empty.png',
+                    width: 120.w,
+                  ),
+                  Text(
+                    'No Data.',
+                    style: getTitleSmallTextStyle().copyWith(
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoInternetUI(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LottieBuilder.asset(
+                'assets/icon/no_internet_icon.json',
+                width: 160,
+              ),
+              Text(
+                'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
+                style: getTitleSmallTextStyle(),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -183,20 +236,24 @@ class _PerformanceViewState extends State<PerformanceView>
   Widget _buildYearTab(PerformanceClass yearData) {
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         if (yearData.semesters.isNotEmpty)
           _buildSemesterSection(context, 'ឆមាសទី ១'.tr, yearData.semesters[0]),
         const SizedBox(height: 16),
         if (yearData.semesters.length > 1)
           _buildSemesterSection(context, 'ឆមាសទី ២'.tr, yearData.semesters[1]),
+        SizedBox(height: 16.h),
       ],
     );
   }
 
   //COMMENT: ******************************** Cards Content ********************************
   Widget _buildSemesterSection(
-      BuildContext context, String semesterTitle, Semester semester) {
+    BuildContext context,
+    String semesterTitle,
+    Semester semester,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: context.bgThirdDarkMode,
@@ -207,7 +264,7 @@ class _PerformanceViewState extends State<PerformanceView>
         children: [
           //COMMENT: ******************************** Header ********************************
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(8.r),
             width: double.infinity,
             decoration: BoxDecoration(
               color: context.secondaryColoDarkMode,
@@ -217,7 +274,7 @@ class _PerformanceViewState extends State<PerformanceView>
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.r),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

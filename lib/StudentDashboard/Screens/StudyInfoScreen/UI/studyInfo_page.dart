@@ -1,6 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:useaapp_version_2/StudentDashboard/components/custom_Student_Multi_Appbar.dart';
 import 'package:useaapp_version_2/theme/text_style.dart';
 import 'package:useaapp_version_2/theme/background.dart';
@@ -23,6 +25,7 @@ class StudyInfoPage extends StatefulWidget {
 class _StudyInfoPageState extends State<StudyInfoPage> {
   late Future<List<StudyInfo>> futureStudyInfo;
   bool _showShimmer = true;
+  bool _isConnected = true;
 
   @override
   void initState() {
@@ -31,6 +34,21 @@ class _StudyInfoPageState extends State<StudyInfoPage> {
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _showShimmer = false;
+      });
+    });
+    _checkConnectivity();
+  }
+
+  Future<void> _checkConnectivity() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = (result != ConnectivityResult.none);
+    });
+
+    // Listen to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
       });
     });
   }
@@ -56,43 +74,70 @@ class _StudyInfoPageState extends State<StudyInfoPage> {
           Navigator.of(context).pop();
         },
       ),
-      body: Stack(
-        children: [
-          // Container(
-          //   decoration: const BoxDecoration(gradient: u_BackgroundScaffold),
-          // ),
-          BackgroundContainer(isDarkMode: colorMode),
-          FutureBuilder<List<StudyInfo>>(
-            future: futureStudyInfo,
-            builder: (context, snapshot) {
-              if (_showShimmer) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return const StudyShimmer();
-                  },
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return const StudyShimmer();
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (snapshot.hasData) {
-                return _buildStudyInfoList(snapshot.data!);
-              } else {
-                return const Center(child: Text('No data found.'));
-              }
-            },
+      body: _isConnected
+          ? _buildStudyInfoContent(context, colorMode)
+          : _buildNoInternetUI(context, colorMode),
+    );
+  }
+
+  Widget _buildStudyInfoContent(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        FutureBuilder<List<StudyInfo>>(
+          future: futureStudyInfo,
+          builder: (context, snapshot) {
+            if (_showShimmer) {
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return const StudyShimmer();
+                },
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return const StudyShimmer();
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              return _buildStudyInfoList(snapshot.data!);
+            } else {
+              return const Center(child: Text('No data found.'));
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoInternetUI(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LottieBuilder.asset(
+                'assets/icon/no_internet_icon.json',
+                width: 160,
+              ),
+              Text(
+                'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
+                style: getTitleSmallTextStyle(),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

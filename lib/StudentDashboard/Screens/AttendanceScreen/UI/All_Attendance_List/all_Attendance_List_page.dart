@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:useaapp_version_2/StudentDashboard/components/custom_Student_Multi_Appbar.dart';
 import 'package:useaapp_version_2/theme/background.dart';
 import 'package:useaapp_version_2/theme/color_builder.dart';
@@ -41,10 +43,12 @@ class __CheckAllAttendanceViewState extends State<_CheckAllAttendanceView>
     with TickerProviderStateMixin {
   late TabController _tabController;
   bool _isLoading = true;
+  bool _isConnected = true;
 
   @override
   void initState() {
     super.initState();
+    _checkConnectivity();
   }
 
   @override
@@ -53,105 +57,142 @@ class __CheckAllAttendanceViewState extends State<_CheckAllAttendanceView>
     super.dispose();
   }
 
+  Future<void> _checkConnectivity() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = (result != ConnectivityResult.none);
+    });
+
+    // Listen to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorMode = isDarkMode(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: StudentMultiAppBar(
         title: 'មើលទាំងអស់'.tr,
         onBackButtonPressed: () => Navigator.of(context).pop(),
       ),
-      body: Stack(
-        children: [
-          // Container(
-          //   width: double.infinity,
-          //   decoration: const BoxDecoration(
-          //     gradient: u_BackgroundScaffold,
-          //   ),
-          // ),
-          BackgroundContainer(isDarkMode: colorMode),
-          BlocBuilder<AttendanceListBloc, AttendanceListState>(
-            builder: (context, state) {
-              if (state is AttendanceListLoading) {
-                return const Center(child: AttendanceListShimmer());
-              } else if (state is AttendanceListError) {
-                return Center(child: Text('Error: ${state.message}'));
-              } else if (state is AttendanceListLoaded) {
-                if (_isLoading) {
-                  //NOTE: Delay for 1 seconds before showing the data
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    setState(() {
-                      _isLoading = false;
-                    });
+      body: _isConnected
+          ? _buildAllAttendanceContent(context, colorMode)
+          : _buildNoInternetUI(context, colorMode),
+    );
+  }
+
+  Widget _buildAllAttendanceContent(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        BlocBuilder<AttendanceListBloc, AttendanceListState>(
+          builder: (context, state) {
+            if (state is AttendanceListLoading) {
+              return const Center(child: AttendanceListShimmer());
+            } else if (state is AttendanceListError) {
+              return Center(child: Text('Error: ${state.message}'));
+            } else if (state is AttendanceListLoaded) {
+              if (_isLoading) {
+                //NOTE: Delay for 1 seconds before showing the data
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  setState(() {
+                    _isLoading = false;
                   });
-                  return const Center(child: AttendanceListShimmer());
-                }
-
-                final loadedAttendances = state.attendances;
-
-                // Set up the TabController based on the number of attendances.
-                _tabController = TabController(
-                    length: loadedAttendances.length, vsync: this);
-
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: _buildTabBar(loadedAttendances),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: loadedAttendances.map((attendance) {
-                          return SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      _buildTabView(
-                                        "យឺត".tr,
-                                        Icons.circle,
-                                        const Color(0xFF003EDD),
-                                      ),
-                                      _buildTabView(
-                                        "សុំច្បាប់".tr,
-                                        Icons.circle,
-                                        const Color(0xFFEA6930),
-                                      ),
-                                      _buildTabView(
-                                        "អវត្តមាន".tr,
-                                        Icons.circle,
-                                        const Color(0xFEC61B12),
-                                      ),
-                                      _buildTabView(
-                                        "វត្តមាន".tr,
-                                        Icons.circle,
-                                        const Color(0xFE4DC739),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                _buildSemesterView(attendance),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                );
+                });
+                return const Center(child: AttendanceListShimmer());
               }
-              return const Center(child: Text('No attendance data found'));
-            },
+
+              final loadedAttendances = state.attendances;
+
+              // Set up the TabController based on the number of attendances.
+              _tabController =
+                  TabController(length: loadedAttendances.length, vsync: this);
+
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: _buildTabBar(loadedAttendances),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: loadedAttendances.map((attendance) {
+                        return SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _buildTabView(
+                                      "យឺត".tr,
+                                      Icons.circle,
+                                      const Color(0xFF003EDD),
+                                    ),
+                                    _buildTabView(
+                                      "សុំច្បាប់".tr,
+                                      Icons.circle,
+                                      const Color(0xFFEA6930),
+                                    ),
+                                    _buildTabView(
+                                      "អវត្តមាន".tr,
+                                      Icons.circle,
+                                      const Color(0xFEC61B12),
+                                    ),
+                                    _buildTabView(
+                                      "វត្តមាន".tr,
+                                      Icons.circle,
+                                      const Color(0xFE4DC739),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              _buildSemesterView(attendance),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return const Center(child: Text('No attendance data found'));
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoInternetUI(BuildContext context, bool colorMode) {
+    return Stack(
+      children: [
+        BackgroundContainer(isDarkMode: colorMode),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LottieBuilder.asset(
+                'assets/icon/no_internet_icon.json',
+                width: 160,
+              ),
+              Text(
+                'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
+                style: getTitleSmallTextStyle(),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

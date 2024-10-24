@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:useaapp_version_2/theme/constants.dart';
 
-import '../../../func/dialog_service.dart';
+import '../../../func/connection_dialog_service.dart';
 import '../../../theme/text_style.dart';
 import 'widgets/custom_Appbar.dart';
 import '../../../components/custom_Bottombar.dart';
@@ -14,8 +16,13 @@ import 'widgets/custom_Slidebar.dart';
 import 'widgets/custom_socialMedia.dart';
 
 class HomeScreen extends StatefulWidget {
-  final int initialIndex; // Add this to accept the index
-  const HomeScreen({super.key, this.initialIndex = 0});
+  final int initialIndex;
+  final int currentIndex;
+  const HomeScreen({
+    super.key,
+    this.initialIndex = 0,
+    this.currentIndex = 0,
+  });
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -25,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool hasInternet = true;
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isNoInternetBannerVisible = false;
-  bool isDialogVisible = false; // Track if the dialog is currently visible
+  bool isDialogVisible = false;
   Color bannerColor = Colors.green;
 
   @override
@@ -61,13 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
               bannerColor = Colors.redAccent;
             });
 
+            // Show the no internet dialog if it's not already visible
             if (!isDialogVisible) {
-              // Show the no internet dialog if it's not already visible
               DialogService.showNoInternetDialog(context);
               isDialogVisible = true;
             }
           }
-        } else if (result != ConnectivityResult.none) {
+        } else {
           // Internet is restored
           if (!hasInternet) {
             setState(() {
@@ -75,6 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
               isNoInternetBannerVisible = true;
               bannerColor = Colors.green;
             });
+
+            // Close only the dialog, not the page
+            if (isDialogVisible && (Get.isDialogOpen ?? false)) {
+              Get.back(result: null);
+              isDialogVisible = false;
+            }
 
             // Hide the banner after a short delay
             Timer(const Duration(seconds: 3), () {
@@ -84,12 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               }
             });
-
-            // Check if the dialog is visible and close it if so
-            if (isDialogVisible && Navigator.of(context).canPop()) {
-              Navigator.of(context).pop(); // Close the dialog
-              isDialogVisible = false;
-            }
           }
         }
       },
@@ -141,30 +148,35 @@ class _HomeScreenState extends State<HomeScreen> {
               top: 0,
               left: 0,
               right: 0,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 800),
-                color: bannerColor.withOpacity(0.9),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 0.0,
-                ),
-                child: Row(
-                  children: [
-                    LottieBuilder.asset(
-                      'assets/icon/no_internet_icon.json',
-                      fit: BoxFit.cover,
-                      height: 56,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Text(
+              child: SizedBox(
+                height: 36.h,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  color: bannerColor,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset(
+                        'assets/icon/no_internet_icon.json',
+                        fit: BoxFit.cover,
+                        height: 36.h,
+                      ),
+                      Text(
                         hasInternet
                             ? 'អ៊ីនធឺណិតបានត្រឡប់មកវិញ...'.tr
                             : 'គ្មានការតភ្ជាប់អ៊ីនធឺណិត...'.tr,
                         style: getTitleSmallTextStyle(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

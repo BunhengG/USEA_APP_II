@@ -9,6 +9,8 @@ class BackgroundContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.zero,
+      margin: EdgeInsets.zero,
       width: double.infinity,
       decoration: isDarkMode ? switchBackground : defaultBackground,
     );

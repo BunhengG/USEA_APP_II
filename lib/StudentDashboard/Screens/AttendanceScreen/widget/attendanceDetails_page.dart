@@ -133,18 +133,24 @@ class AttendanceDetailsPage extends StatelessWidget {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  padding:
-                                                      const EdgeInsets.all(6),
+                                                  width: 120.w,
+                                                  padding: EdgeInsets.all(5.r),
                                                   decoration: BoxDecoration(
                                                     color: sessionColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            rd_SmallRounded),
+                                                      rd_SmallRounded,
+                                                    ),
                                                   ),
                                                   child: Text(
                                                     session.sessionAll,
-                                                    style:
-                                                        getTitleSmallTextStyle(),
+                                                    style: const TextStyle(
+                                                      fontFamily: ft_Eng,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: cl_ThirdColor,
+                                                    ),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 3),

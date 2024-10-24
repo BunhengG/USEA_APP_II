@@ -77,7 +77,7 @@ class _CustomSlidebarState extends State<CustomSlidebar> {
                       autoPlay: true,
                       enlargeCenterPage: true,
                       enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      autoPlayInterval: const Duration(seconds: 10),
+                      autoPlayInterval: const Duration(seconds: 5),
                       onPageChanged: (index, reason) {
                         setState(() {
                           activeIndex = index;

@@ -88,8 +88,8 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'USEA-APP-VERSION-2.0',
-          theme: buildThemeData(), 
-          darkTheme: buildDarkThemeData(), 
+          theme: buildThemeData(),
+          darkTheme: buildDarkThemeData(),
           themeMode: themeProvider.themeMode,
           translations: LocaleString(), // Use GetX translations
           locale: Get.locale ?? initialLocale, // Set the loaded locale

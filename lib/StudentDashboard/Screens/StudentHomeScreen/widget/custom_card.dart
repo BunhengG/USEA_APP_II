@@ -28,12 +28,13 @@ class CustomCard extends StatelessWidget {
     double yourCredit = double.tryParse(creditData.yourCredit) ?? 0.0;
     double percentage = totalCredit > 0 ? (yourCredit / totalCredit) : 0.0;
 
-    double cardHeight = MediaQuery.of(context).size.height * 0.28.h;
+    double cardHeight = MediaQuery.of(context).size.height * 0.3.h;
     double avatarSize = MediaQuery.of(context).size.width * 0.14.w;
 
     return Stack(
       children: [
-        SizedBox(
+        Container(
+          padding: EdgeInsets.only(bottom: 16.r),
           height: cardHeight,
           width: double.infinity,
           child: Stack(
@@ -194,7 +195,7 @@ class CustomCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: cardHeight * 0.35.h,
+          top: cardHeight * 0.32.h,
           right: 16.r,
           child: CircularPercentIndicator(
             radius: 65.0,

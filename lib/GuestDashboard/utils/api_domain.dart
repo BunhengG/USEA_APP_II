@@ -29,4 +29,8 @@ class ApiConfig {
   static String getAboutUsDataUrl(String languageCode) {
     return '$_baseUrl/api/webapi.php?action=recognition_${languageCode == 'km' ? 'kh' : 'en'}';
   }
+  static String getFQADataUrl(String languageCode) {
+  return '$_baseUrl/api/webapi.php?action=faq${languageCode == 'km' ? '' : '_en'}';
+}
+
 }

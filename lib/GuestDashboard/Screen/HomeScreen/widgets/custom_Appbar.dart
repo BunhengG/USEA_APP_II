@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:useaapp_version_2/GuestDashboard/Screen/FAQScreen/FQAScreen.dart';
 import '../../../../theme/constants.dart';
 import '../../../NotificationScreen/notification_screen.dart';
 
@@ -57,18 +58,26 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             const Spacer(),
-            Container(
-              width: 28,
-              height: 28,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromRGBO(255, 255, 255, 0.1),
+            GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FAQScreen(),
+                ),
               ),
-              child: Center(
-                child: Image.asset(
-                  'assets/icon/chat.png',
-                  width: 20.0,
-                  height: 20.0,
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromRGBO(255, 255, 255, 0.1),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    'assets/icon/chat.png',
+                    width: 20.0,
+                    height: 20.0,
+                  ),
                 ),
               ),
             ),

@@ -180,7 +180,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           )
                         else
                           buildPlaceholderCard(context, colorMode),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 8.h),
                         const CustomGridView(),
                       ],
                     ),

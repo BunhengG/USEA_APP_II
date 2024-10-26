@@ -29,6 +29,9 @@ import 'StudentDashboard/Screens/StudyInfoScreen/UI/studyInfo_page.dart';
 import 'StudentDashboard/api/fetch_schedule.dart';
 import 'StudentDashboard/auth/UI/LoginPage.dart';
 
+// Define a global RouteObserver
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -91,6 +94,7 @@ class MyApp extends StatelessWidget {
           theme: buildThemeData(),
           darkTheme: buildDarkThemeData(),
           themeMode: themeProvider.themeMode,
+          navigatorObservers: [routeObserver],
           translations: LocaleString(), // Use GetX translations
           locale: Get.locale ?? initialLocale, // Set the loaded locale
           fallbackLocale: const Locale('en'), // Fallback locale

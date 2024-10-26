@@ -9,6 +9,7 @@ import '../StudentDashboard/Screens/StudentHomeScreen/UI/HomePage.dart';
 import '../StudentDashboard/helpers/shared_pref_helper.dart';
 import '../UsersScreen/Multiple_Users.dart';
 import '../func/shared_pref_language.dart';
+import '../main.dart';
 import '../theme/constants.dart';
 import '../theme/text_style.dart';
 import '../theme/theme_provider/theme_utils.dart';
@@ -21,7 +22,7 @@ class CustomBottombar extends StatefulWidget {
   State<CustomBottombar> createState() => _CustomBottombarState();
 }
 
-class _CustomBottombarState extends State<CustomBottombar> {
+class _CustomBottombarState extends State<CustomBottombar> with RouteAware {
   late int _selectedIndex;
   int _previousIndex = 0;
 
@@ -36,6 +37,30 @@ class _CustomBottombarState extends State<CustomBottombar> {
         precacheImage(AssetImage('assets/icon/cambodia.png'), context);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  // Called when navigating back to this widget
+  @override
+  void didPopNext() {
+    setState(() {
+      _selectedIndex =
+          widget.initialIndex; // Reset to the initial index if needed
+    });
   }
 
   // Method to handle tab changes

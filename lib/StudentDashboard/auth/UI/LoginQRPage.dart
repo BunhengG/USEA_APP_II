@@ -1,13 +1,22 @@
+import 'dart:io';
+import 'dart:developer';
+import 'dart:async';
+
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart' as qrScanner;
 import 'package:quickalert/quickalert.dart';
 import 'package:useaapp_version_2/StudentDashboard/Screens/StudentHomeScreen/UI/HomePage.dart';
 import 'package:useaapp_version_2/theme/constants.dart';
 import '../../api/fetch_user.dart';
 import '../../helpers/shared_pref_helper.dart';
+import 'package:google_ml_kit/google_ml_kit.dart' as mlKit;
 
 class LoginQRPage extends StatefulWidget {
   const LoginQRPage({super.key});
@@ -24,12 +33,15 @@ class _LoginQRPageState extends State<LoginQRPage>
   bool _isDialogShown = false;
   bool _isFlashOn = false;
   late AnimationController _animationController;
+  final ImagePicker _picker = ImagePicker();
+  // ignore: unused_field
+  File? _image;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     )..repeat(reverse: true);
   }
@@ -51,25 +63,35 @@ class _LoginQRPageState extends State<LoginQRPage>
           _buildQRView(cutOutSize),
           _buildCustomBorders(cutOutSize),
           _buildBackButton(),
-          _buildTitle(),
-          _buildFlashlightButton(),
-          _buildAnimatedBorder(cutOutSize),
+          // _buildAnimatedBorder(cutOutSize),
         ],
       ),
     );
   }
 
   Widget _buildQRView(double cutOutSize) {
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        overlayColor: Colors.black.withOpacity(0.5),
-        borderColor: cl_ThirdColor,
-        borderRadius: 16,
-        borderLength: 32,
-        borderWidth: 8,
-        cutOutSize: cutOutSize,
+    return Container(
+      color: Colors.black,
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.90.h,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                overlayColor: Colors.transparent,
+                borderColor: cl_ThirdColor,
+                borderRadius: rd_LargeRounded,
+                borderLength: 32,
+                borderWidth: 5,
+                cutOutSize: cutOutSize,
+              ),
+              onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+            ),
+          ),
+          _buildFlashlightAndUploadButton(),
+        ],
       ),
     );
   }
@@ -91,45 +113,55 @@ class _LoginQRPageState extends State<LoginQRPage>
   }
 
   Widget _buildCornerBorder(int index) {
-    const BorderSide borderSide = BorderSide(width: 5, color: cl_ThirdColor);
+    const BorderSide borderSide = BorderSide(
+      width: 6,
+      color: cl_ThirdColor,
+    );
     BorderRadius borderRadius;
     Alignment alignment;
 
     switch (index) {
-      case 0: //* Top-left
-        borderRadius = const BorderRadius.only(topLeft: Radius.circular(16));
+      case 0: //* Top-left corner
+        borderRadius = const BorderRadius.only(
+          topLeft: Radius.circular(rd_MediumRounded),
+        );
         alignment = Alignment.topLeft;
         break;
-      case 1: //* Top-right
-        borderRadius = const BorderRadius.only(topRight: Radius.circular(16));
+      case 1: //* Top-right corner
+        borderRadius = const BorderRadius.only(
+          topRight: Radius.circular(rd_MediumRounded),
+        );
         alignment = Alignment.topRight;
         break;
-      case 2: //* Bottom-left
-        borderRadius = const BorderRadius.only(bottomLeft: Radius.circular(16));
+      case 2: //* Bottom-left corner
+        borderRadius = const BorderRadius.only(
+          bottomLeft: Radius.circular(rd_MediumRounded),
+        );
         alignment = Alignment.bottomLeft;
         break;
-      case 3: //* Bottom-right
+      case 3: //* Bottom-right corner
       default:
-        borderRadius =
-            const BorderRadius.only(bottomRight: Radius.circular(16));
+        borderRadius = const BorderRadius.only(
+          bottomRight: Radius.circular(rd_LargeRounded),
+        );
         alignment = Alignment.bottomRight;
         break;
     }
 
     return Positioned(
       top: alignment.y < 0 ? 0 : null,
-      bottom: alignment.y >= 0 ? 0 : null,
+      bottom: alignment.y > 0 ? 0 : null,
       left: alignment.x < 0 ? 0 : null,
-      right: alignment.x >= 0 ? 0 : null,
+      right: alignment.x > 0 ? 0 : null,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 46,
+        height: 46,
         decoration: BoxDecoration(
           border: Border(
-            top: borderSide,
+            top: alignment.y < 0 ? borderSide : BorderSide.none,
+            bottom: alignment.y > 0 ? borderSide : BorderSide.none,
             left: alignment.x < 0 ? borderSide : BorderSide.none,
-            right: alignment.x >= 0 ? borderSide : BorderSide.none,
-            bottom: alignment.y >= 0 ? borderSide : BorderSide.none,
+            right: alignment.x > 0 ? borderSide : BorderSide.none,
           ),
           borderRadius: borderRadius,
         ),
@@ -139,24 +171,97 @@ class _LoginQRPageState extends State<LoginQRPage>
 
   Widget _buildBackButton() {
     return Positioned(
-      top: 45.h,
+      top: 40.h,
+      left: 120.w,
+      right: 8.w,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text(
+            'គណនីនិស្សិត'.tr,
+            style: const TextStyle(
+              color: cl_ThirdColor,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           IconButton(
             icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
+              Icons.close,
               color: cl_ThirdColor,
               size: 24,
             ),
             onPressed: () => Navigator.pop(context),
           ),
-          Text(
-            'គណនីនិស្សិត'.tr,
-            style: const TextStyle(
-              color: cl_ThirdColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlashlightAndUploadButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(rd_LargeRounded),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Flash button
+          InkWell(
+            onTap: _toggleFlash,
+            child: Container(
+              width: 150,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+              decoration: BoxDecoration(
+                color: _isFlashOn ? Colors.grey : Colors.grey[800],
+                borderRadius: BorderRadius.circular(rd_LargeRounded),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _isFlashOn
+                        ? Icons.flashlight_on_rounded
+                        : Icons.flashlight_off_rounded,
+                    color: cl_ThirdColor,
+                  ),
+                  SizedBox(width: 8.w),
+                  const Text(
+                    'Flash',
+                    style: TextStyle(color: cl_ThirdColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 20.w),
+
+          // Upload QR button
+          InkWell(
+            onTap: _pickImageAndScan,
+            child: Container(
+              width: 150,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+              decoration: BoxDecoration(
+                color: Colors.grey[800],
+                borderRadius: BorderRadius.circular(rd_LargeRounded),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.qr_code_rounded,
+                    color: cl_ThirdColor,
+                  ),
+                  SizedBox(width: 8.w),
+                  const Text(
+                    'Upload QR',
+                    style: TextStyle(color: cl_ThirdColor),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -164,102 +269,42 @@ class _LoginQRPageState extends State<LoginQRPage>
     );
   }
 
-  Widget _buildTitle() {
-    return Positioned(
-      top: 150.h,
-      left: 0,
-      right: 0,
-      child: const Center(
-        child: Text(
-          "Scan QR Code",
-          style: TextStyle(
-            fontSize: 24,
-            color: cl_ThirdColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFlashlightButton() {
-    return Positioned(
-      bottom: (MediaQuery.of(context).size.height -
-                  (MediaQuery.of(context).size.width * 0.7)) /
-              2 -
-          120.h,
-      left: (MediaQuery.of(context).size.width / 2) - 40.w,
-      child: Container(
-        width: 60.w,
-        height: 60.h,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(rd_FullRounded),
-          color: _isFlashOn ? cl_ThirdColor : Colors.white60,
-        ),
-        child: IconButton(
-          icon: Image.asset(
-            'assets/img/flashlight.png',
-            scale: 12,
-          ),
-          onPressed: _toggleFlash,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAnimatedBorder(double cutOutSize) {
-    return Positioned(
-      top: (MediaQuery.of(context).size.height - cutOutSize) / 2,
-      left: (MediaQuery.of(context).size.width - cutOutSize) / 2,
-      child: SizedBox(
-        width: cutOutSize,
-        height: cutOutSize,
-        child: AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) {
-            return Stack(
-              children: [
-                Positioned(
-                  top: cutOutSize / 2 - 1,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: cl_ThirdColor,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    transform: Matrix4.translationValues(
-                      0,
-                      _animationController.value * 200 - 100,
-                      0,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
-    // Removed the Future.delayed since it was not being used.
-
-    controller.scannedDataStream.listen((scanData) async {
-      if (mounted) {
-        setState(() {
-          result = scanData;
-        });
-        await _loginWithQRCode(); // Call your login method
-      }
-    });
-  }
+  // Widget _buildAnimatedBorder(double cutOutSize) {
+  //   return Positioned(
+  //     top: (MediaQuery.of(context).size.height - cutOutSize) / 2,
+  //     left: (MediaQuery.of(context).size.width - cutOutSize) / 2,
+  //     child: SizedBox(
+  //       width: cutOutSize,
+  //       height: cutOutSize,
+  //       child: AnimatedBuilder(
+  //         animation: _animationController,
+  //         builder: (context, child) {
+  //           return Stack(
+  //             children: [
+  //               Positioned(
+  //                 top: cutOutSize / 2 - 1,
+  //                 left: 0,
+  //                 right: 0,
+  //                 child: Container(
+  //                   height: 3,
+  //                   decoration: BoxDecoration(
+  //                     color: cl_ThirdColor,
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   transform: Matrix4.translationValues(
+  //                     0,
+  //                     _animationController.value * 200 - 100,
+  //                     0,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<void> _loginWithQRCode() async {
     if (result != null) {
@@ -321,6 +366,126 @@ class _LoginQRPageState extends State<LoginQRPage>
     );
   }
 
+  Future<void> _toggleFlash() async {
+    if (controller != null) {
+      setState(() {
+        _isFlashOn = !_isFlashOn;
+      });
+      await controller!.toggleFlash();
+    }
+  }
+
+  //COMMENT: Pick Image from gallery
+  Future<void> _pickImageAndScan() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        if (mounted) {
+          setState(
+            () => _image = File(pickedFile.path),
+          );
+        }
+        await _scanQRCodeFromImage(pickedFile.path);
+      } else {
+        _showSnackbar('ការចូលគណនីបានបរាជ័យ'.tr);
+      }
+    } catch (e) {
+      _showSnackbar('Error picking image: $e');
+    }
+  }
+
+  //COMMENT Scan QR Code image from gallery
+  Future<void> _scanQRCodeFromImage(String filePath) async {
+    try {
+      final inputImage = mlKit.InputImage.fromFilePath(filePath);
+      final barcodeScanner = mlKit.BarcodeScanner(
+        formats: [mlKit.BarcodeFormat.qrCode],
+      );
+      final List<mlKit.Barcode> barcodes =
+          await barcodeScanner.processImage(inputImage);
+      if (barcodes.isNotEmpty) {
+        final mlKit.Barcode barcode = barcodes.first;
+        final String? qrCodeData = barcode.displayValue ?? barcode.rawValue;
+        if (qrCodeData != null && _isValidQRCode(qrCodeData)) {
+          if (mounted) {
+            setState(
+              () => result = Barcode(
+                code: qrCodeData,
+                format: qrCodeData,
+              ),
+            );
+            await _loginWithQRCode();
+          }
+        } else {
+          _showSnackbar('ការចូលគណនីបានបរាជ័យ'.tr);
+        }
+      } else {
+        _showSnackbar('ការចូលគណនីបានបរាជ័យ'.tr);
+      }
+    } catch (e) {
+      _showSnackbar('Error scanning image: $e');
+    }
+  }
+
+  //COMMENT Check for valid QR code
+  bool _isValidQRCode(String qrCode) => qrCode.isNotEmpty;
+
+  Future<void> _checkCameraPermission() async {
+    var status = await Permission.camera.status;
+
+    if (status.isDenied) {
+      status = await Permission.camera.request();
+
+      if (status.isPermanentlyDenied) {
+        openAppSettings();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Camera permission is permanently denied. Please enable it from settings.'),
+          ),
+        );
+      } else if (!status.isGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Camera permission denied'),
+          ),
+        );
+      }
+    }
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    if (!p) {
+      _checkCameraPermission();
+    }
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    if (mounted) {
+      setState(() {
+        this.controller = controller;
+      });
+    }
+
+    controller.scannedDataStream.listen((qrScanner.Barcode scanData) async {
+      try {
+        if (mounted) {
+          setState(
+            () => result = Barcode(
+              code: scanData.code,
+              format: scanData.format.formatName,
+            ),
+          );
+          await _loginWithQRCode();
+          controller.pauseCamera();
+        }
+      } catch (e) {
+        print("Error while scanning: $e");
+      }
+    });
+  }
+
   void _showSuccessDialog(BuildContext context) {
     if (!_isDialogShown) {
       _isDialogShown = true;
@@ -370,19 +535,17 @@ class _LoginQRPageState extends State<LoginQRPage>
     ).show(context);
   }
 
-  Future<void> _toggleFlash() async {
-    if (controller != null) {
-      setState(() {
-        _isFlashOn = !_isFlashOn;
-      });
-      await controller!.toggleFlash();
-    }
-  }
-
   @override
   void dispose() {
     controller?.dispose();
     _animationController.dispose();
     super.dispose();
   }
+}
+
+class Barcode {
+  final String? code;
+  final String? format;
+
+  Barcode({this.code, this.format});
 }

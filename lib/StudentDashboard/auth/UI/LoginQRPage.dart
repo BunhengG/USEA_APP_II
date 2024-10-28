@@ -33,6 +33,7 @@ class _LoginQRPageState extends State<LoginQRPage>
   bool _isDialogShown = false;
   bool _isFlashOn = false;
   late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
   final ImagePicker _picker = ImagePicker();
   // ignore: unused_field
   File? _image;
@@ -44,6 +45,13 @@ class _LoginQRPageState extends State<LoginQRPage>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -84,7 +92,7 @@ class _LoginQRPageState extends State<LoginQRPage>
                 borderColor: cl_ThirdColor,
                 borderRadius: rd_LargeRounded,
                 borderLength: 32,
-                borderWidth: 5,
+                borderWidth: 6,
                 cutOutSize: cutOutSize,
               ),
               onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
@@ -100,14 +108,22 @@ class _LoginQRPageState extends State<LoginQRPage>
     return Positioned(
       top: (MediaQuery.of(context).size.height - cutOutSize) / 2,
       left: (MediaQuery.of(context).size.width - cutOutSize) / 2,
-      child: SizedBox(
-        width: cutOutSize,
-        height: cutOutSize,
-        child: Stack(
-          children: List.generate(4, (index) {
-            return _buildCornerBorder(index);
-          }),
-        ),
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: SizedBox(
+              width: cutOutSize,
+              height: cutOutSize,
+              child: Stack(
+                children: List.generate(4, (index) {
+                  return _buildCornerBorder(index);
+                }),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -157,6 +173,7 @@ class _LoginQRPageState extends State<LoginQRPage>
         width: 46,
         height: 46,
         decoration: BoxDecoration(
+          color: Colors.transparent,
           border: Border(
             top: alignment.y < 0 ? borderSide : BorderSide.none,
             bottom: alignment.y > 0 ? borderSide : BorderSide.none,

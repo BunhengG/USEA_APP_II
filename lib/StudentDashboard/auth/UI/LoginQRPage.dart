@@ -83,7 +83,7 @@ class _LoginQRPageState extends State<LoginQRPage>
       child: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.90.h,
+            height: MediaQuery.of(context).size.height * 0.86,
             child: QRView(
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,

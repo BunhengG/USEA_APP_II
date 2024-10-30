@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:useaapp_version_2/theme/color_builder.dart';
 import '../../../../theme/text_style.dart';
+import '../../../../theme/theme_provider/theme_utils.dart';
 import '../model/performance_model.dart';
 
 // Method to build the BottomSheet for Attendance data
@@ -73,13 +74,14 @@ class _AttendanceBottomSheetState extends State<AttendanceBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    final colorMode = isDarkMode(context);
     return AnimatedBuilder(
       animation: _heightAnimation,
       builder: (context, child) {
         return SizedBox(
           width: double.infinity,
           height:
-              MediaQuery.of(context).size.height * 0.5 * _heightAnimation.value,
+              MediaQuery.of(context).size.height * 0.4 * _heightAnimation.value,
           child: SingleChildScrollView(
             // Add this line
             child: Column(
@@ -158,7 +160,8 @@ class _AttendanceBottomSheetState extends State<AttendanceBottomSheet>
                         context,
                         'វត្តមាន\t'.tr,
                         widget.attendance.attendancePs,
-                        valueColor: Colors.blue[900],
+                        valueColor:
+                            colorMode ? Colors.blue[700] : Colors.blue[900],
                       ),
                       _buildDivider(context),
                     ],

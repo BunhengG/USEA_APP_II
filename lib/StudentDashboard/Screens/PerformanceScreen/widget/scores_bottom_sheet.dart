@@ -80,7 +80,7 @@ class _ScoresBottomSheetState extends State<ScoresBottomSheet>
       builder: (context, child) {
         return SizedBox(
           height:
-              MediaQuery.of(context).size.height * 0.8 * _heightAnimation.value,
+              MediaQuery.of(context).size.height * 0.6 * _heightAnimation.value,
           width: double.infinity,
           child: SingleChildScrollView(
             // Added ScrollView
@@ -155,20 +155,22 @@ class _ScoresBottomSheetState extends State<ScoresBottomSheet>
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
-                            top: 26.0,
+                            top: 18,
                             bottom: 8,
                             left: 16,
                             right: 16,
                           ),
                           child: Text(
-                            score.title,
+                            score.title.isNotEmpty
+                                ? score.title
+                                : 'គ្មានទិន្ន័យ'.tr,
                             style:
                                 getTitleSmallPrimaryColorTextStyle().copyWith(
                               color: context.titlePrimaryColor,
                             ),
                           ),
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 8.h),
                         //COMMENT: ******************************** Header Bottom Sheet ********************************
                         Padding(
                           padding: const EdgeInsets.all(16),

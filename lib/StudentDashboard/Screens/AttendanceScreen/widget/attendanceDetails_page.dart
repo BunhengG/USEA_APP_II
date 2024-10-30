@@ -64,178 +64,174 @@ class AttendanceDetailsPage extends StatelessWidget {
               color: context.secondaryColoDarkMode,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: subject.dates.isEmpty
-                      ? Center(
-                          child: Text(
-                            'មិនមានវត្តមានសម្រាប់មុខវិជ្ជានេះទេ។',
-                            style: getTitleSmallPrimaryColorTextStyle(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: subject.dates.isEmpty
+                    ? Center(
+                        child: Text(
+                          'មិនមានវត្តមានសម្រាប់មុខវិជ្ជានេះទេ។'.tr,
+                          style: getTitleSmallPrimaryColorTextStyle().copyWith(
+                            color: context.subTitlePrimaryColor,
                           ),
-                        )
-                      : ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: subject.dates.length,
-                          itemBuilder: (context, index) {
-                            final date = subject.dates[index];
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsets.only(left: 16.0.r),
-                                          child: Text(
-                                            date.dateName,
-                                            style:
-                                                getTitleSmallPrimaryColorTextStyle()
-                                                    .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: context.subTitleColor,
-                                            ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: subject.dates.length,
+                        itemBuilder: (context, index) {
+                          final date = subject.dates[index];
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 8.0.r),
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          date.dateName,
+                                          style:
+                                              getTitleSmallPrimaryColorTextStyle()
+                                                  .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: context.subTitleColor,
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 16.sp),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children:
-                                              date.sessions.map((session) {
-                                            Color sessionColor;
+                                    ),
+                                    SizedBox(width: 16.sp),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: date.sessions.map((session) {
+                                          Color sessionColor;
 
-                                            if (int.parse(session.session) %
-                                                    2 ==
-                                                0) {
-                                              sessionColor =
-                                                  const Color(0xFF39AEC7)
-                                                      .withOpacity(0.5);
-                                            } else {
-                                              sessionColor =
-                                                  const Color(0xFFC7396D)
-                                                      .withOpacity(0.5);
-                                            }
+                                          if (int.parse(session.session) % 2 ==
+                                              0) {
+                                            sessionColor =
+                                                const Color(0xFF39AEC7)
+                                                    .withOpacity(0.5);
+                                          } else {
+                                            sessionColor =
+                                                const Color(0xFFC7396D)
+                                                    .withOpacity(0.5);
+                                          }
 
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  width: 120.w,
-                                                  padding: EdgeInsets.all(5.r),
-                                                  decoration: BoxDecoration(
-                                                    color: sessionColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      rd_SmallRounded,
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    session.sessionAll,
-                                                    style: const TextStyle(
-                                                      fontFamily: ft_Eng,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: cl_ThirdColor,
-                                                    ),
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 130.w,
+                                                padding: EdgeInsets.all(5.r),
+                                                decoration: BoxDecoration(
+                                                  color: sessionColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    rd_SmallRounded,
                                                   ),
                                                 ),
-                                                const SizedBox(height: 3),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  session.sessionAll,
+                                                  style: const TextStyle(
+                                                    fontFamily: ft_Eng,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: cl_ThirdColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 3),
+                                            ],
+                                          );
+                                        }).toList(),
                                       ),
-                                      SizedBox(width: 16.sp),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children:
-                                              date.sessions.map((session) {
-                                            String statusText;
-                                            Color containerColor;
+                                    ),
+                                    SizedBox(width: 16.sp),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: date.sessions.map((session) {
+                                          String statusText;
+                                          Color containerColor;
 
-                                            if (session.absentStatus == "al") {
-                                              statusText = 'យឺត';
-                                              containerColor =
-                                                  context.attendLateMode;
-                                            } else if (session.absentStatus ==
-                                                "ps") {
-                                              statusText = 'វត្តមាន\t';
-                                              containerColor =
-                                                  context.attendPresentMode;
-                                            } else if (session.absentStatus ==
-                                                "awop") {
-                                              statusText = 'សុំច្បាប់';
-                                              containerColor =
-                                                  context.attendPermissionMode;
-                                            } else if (session.absentStatus ==
-                                                "awp") {
-                                              statusText = 'អវត្តមាន';
-                                              containerColor =
-                                                  context.attendAbsentMode;
-                                            } else {
-                                              statusText = 'N/A';
-                                              containerColor = Colors.grey;
-                                            }
+                                          if (session.absentStatus == "al") {
+                                            statusText = 'យឺត';
+                                            containerColor =
+                                                context.attendLateMode;
+                                          } else if (session.absentStatus ==
+                                              "ps") {
+                                            statusText = 'វត្តមាន\t';
+                                            containerColor =
+                                                context.attendPresentMode;
+                                          } else if (session.absentStatus ==
+                                              "awop") {
+                                            statusText = 'សុំច្បាប់';
+                                            containerColor =
+                                                context.attendPermissionMode;
+                                          } else if (session.absentStatus ==
+                                              "awp") {
+                                            statusText = 'អវត្តមាន';
+                                            containerColor =
+                                                context.attendAbsentMode;
+                                          } else {
+                                            statusText = 'N/A';
+                                            containerColor = Colors.grey;
+                                          }
 
-                                            return Container(
-                                              width: 90.w,
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 8.w,
-                                                vertical: 6.h,
+                                          return Container(
+                                            width: 90.w,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w,
+                                              vertical: 6.h,
+                                            ),
+                                            margin: const EdgeInsets.only(
+                                              bottom: 3,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: containerColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                rd_SmallRounded,
                                               ),
-                                              margin: const EdgeInsets.only(
-                                                bottom: 3,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: containerColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  rd_SmallRounded,
-                                                ),
-                                              ),
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                statusText,
-                                                style: getTitleSmallTextStyle()
-                                                    .copyWith(
-                                                        color:
-                                                            context.titleColor),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                            ),
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              statusText,
+                                              style: getTitleSmallTextStyle()
+                                                  .copyWith(
+                                                      color:
+                                                          context.titleColor),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                if (index < subject.dates.length - 1)
-                                  const Divider(
-                                    color: cl_PlaceholderColor,
-                                    thickness: 0.2,
-                                  ),
-                              ],
-                            );
-                          },
-                        ),
-                ),
-              ],
-            ),
+                              ),
+                              if (index < subject.dates.length - 1)
+                                const Divider(
+                                  color: cl_PlaceholderColor,
+                                  thickness: 0.2,
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+              ),
+            ],
           ),
         ],
       ),

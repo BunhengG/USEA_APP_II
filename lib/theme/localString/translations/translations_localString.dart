@@ -240,6 +240,8 @@ class LocaleString extends Translations {
           'កាលបរិច្ឆេទ': 'កាលបរិច្ឆេទ',
           'ម៉ោងសិក្សា': 'ម៉ោងសិក្សា',
           'ឆមាសទី ': 'ឆមាសទី ',
+          'មិនមានវត្តមានសម្រាប់មុខវិជ្ជានេះទេ។':
+              'មិនមានវត្តមានសម្រាប់មុខវិជ្ជានេះទេ។',
 
           // Student Payment
           'ការបង់ថ្លៃឈ្នួលសិក្សា': 'ការបង់ថ្លៃឈ្នួលសិក្សា',
@@ -528,6 +530,7 @@ class LocaleString extends Translations {
           'Semester II': 'Semester II',
           'កាលបរិច្ឆេទ': 'Date',
           'ម៉ោងសិក្សា': 'Study Hour',
+          'មិនមានវត្តមានសម្រាប់មុខវិជ្ជានេះទេ។': 'Not present for this course.',
 
           // Student Payment
           'ឆ្នាំទី​ ': 'Year ',

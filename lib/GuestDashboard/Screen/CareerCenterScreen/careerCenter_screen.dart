@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../components/multi_Appbar.dart';
 import '../../../theme/constants.dart';
@@ -237,14 +236,5 @@ class _CareerCenterScreenState extends State<CareerCenterScreen> {
                   ),
       ),
     );
-  }
-
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../theme/constants.dart';
 import '../../../../theme/text_style.dart';
@@ -214,10 +217,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void _showYearDetailsBottomSheet(
     Map<String, dynamic> yearData,
     Color color,
-    // String yearName,
   ) {
     final totalCredit = yearData['year_data'].first['total_credit'] ?? '0';
     final subjectData = yearData['year_data'].first['subject_data'] as List;
+
+    final ScrollController scrollController = ScrollController();
 
     showModalBottomSheet(
       elevation: 1.0,
@@ -225,131 +229,151 @@ class _DetailsScreenState extends State<DetailsScreen> {
       isScrollControlled: true,
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.8,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(rd_MediumRounded),
-              color: cl_ThirdColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+          heightFactor: 0.7.h,
+          child: Stack(
+            children: [
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                child: Container(
                   decoration: BoxDecoration(
-                    boxShadow: const [sd_BoxShadow],
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(rd_MediumRounded),
-                      topRight: Radius.circular(rd_MediumRounded),
-                    ),
-                    color: color,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 8.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 8),
-                          child: Text(
-                            'មុខវិជ្ជា\t'.tr.toUpperCase(),
-                            style: getTitleSmallTextStyle(),
-                          ),
-                        ),
-                        const SizedBox(width: 16.0),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                '\tក្រេឌីតសរុប\t'.tr.toUpperCase(),
-                                style: getTitleSmallTextStyle(),
-                              ),
-                              const SizedBox(width: 8.0),
-                              Container(
-                                width: 26,
-                                height: 26,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(rd_FullRounded),
-                                  color: cl_ItemBackgroundColor,
-                                ),
-                                child: Text(
-                                  totalCredit,
-                                  style: const TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: cl_PrimaryColor,
-                                    fontFamily: ft_Eng,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    borderRadius: BorderRadius.circular(rd_LargeRounded),
+                    color: color.withOpacity(0.5),
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: subjectData.length,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final subject = subjectData[index];
-                      final subjectName = subject['Subject'];
-                      final credit = subject['Credit'];
-
-                      return Padding(
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(rd_LargeRounded),
+                  color: cl_ThirdColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(rd_LargeRounded),
+                          topRight: Radius.circular(rd_LargeRounded),
+                        ),
+                        color: color,
+                      ),
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
+                          vertical: 8.0,
                           horizontal: 8.0,
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: 24,
-                              alignment: Alignment.center,
+                              margin: const EdgeInsets.only(left: 8),
                               child: Text(
-                                "${index + 1}.",
-                                style: getBodyMediumTextStyle(),
+                                'មុខវិជ្ជា\t'.tr.toUpperCase(),
+                                style: getTitleSmallTextStyle(),
                               ),
                             ),
-                            const SizedBox(width: 8.0),
-                            Expanded(
-                              child: Text(
-                                subjectName,
-                                style: getBodyMediumTextStyle(),
-                              ),
-                            ),
-                            const SizedBox(width: 8.0),
+                            SdW_SizeBox_M,
                             Container(
-                              width: 26,
-                              height: 26,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(rd_FullRounded),
-                                color: const Color(0xFFD9D9D9).withOpacity(0.7),
-                              ),
-                              child: Text(
-                                "$credit",
-                                style: getBodyMediumTextStyle(),
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '\tក្រេឌីតសរុប\t'.tr.toUpperCase(),
+                                    style: getTitleSmallTextStyle(),
+                                  ),
+                                  SdW_SizeBox_S,
+                                  Container(
+                                    width: 26,
+                                    height: 26,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(rd_FullRounded),
+                                      color: cl_ItemBackgroundColor,
+                                    ),
+                                    child: Text(
+                                      totalCredit,
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: cl_PrimaryColor,
+                                        fontFamily: ft_Eng,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    Expanded(
+                      child: RawScrollbar(
+                        controller: scrollController,
+                        thumbVisibility: true,
+                        thickness: 4.0,
+                        radius: const Radius.circular(rd_SmallRounded),
+                        thumbColor: cl_PlaceholderColor,
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: subjectData.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final subject = subjectData[index];
+                            final subjectName = subject['Subject'];
+                            final credit = subject['Credit'];
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4.0,
+                                horizontal: 8.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "${index + 1}.",
+                                      style: getBodyMediumTextStyle(),
+                                    ),
+                                  ),
+                                  SdW_SizeBox_S,
+                                  Expanded(
+                                    child: Text(
+                                      subjectName,
+                                      style: getBodyMediumTextStyle(),
+                                    ),
+                                  ),
+                                  SdW_SizeBox_S,
+                                  Container(
+                                    width: 26,
+                                    height: 26,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(rd_FullRounded),
+                                      color: Colors.grey.shade300,
+                                    ),
+                                    child: Text(
+                                      "$credit",
+                                      style: getBodyMediumTextStyle(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

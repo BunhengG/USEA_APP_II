@@ -40,7 +40,7 @@ class CustomCard extends StatelessWidget {
           child: Stack(
             children: [
               Container(
-                padding: EdgeInsets.all(20.0.r),
+                padding: EdgeInsets.all(16.0.r),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(rd_MediumRounded),
                   color: context.colorDarkMode,
@@ -195,7 +195,7 @@ class CustomCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: cardHeight * 0.1,
+          top: cardHeight * 0.090,
           right: 20.r,
           child: CircularPercentIndicator(
             radius: 65.0,

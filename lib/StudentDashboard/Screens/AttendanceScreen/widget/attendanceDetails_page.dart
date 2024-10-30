@@ -93,21 +93,17 @@ class AttendanceDetailsPage extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 8.0.r),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          date.dateName,
-                                          style:
-                                              getTitleSmallPrimaryColorTextStyle()
-                                                  .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: context.subTitleColor,
-                                          ),
+                                      child: Text(
+                                        textAlign: TextAlign.start,
+                                        date.dateName,
+                                        style:
+                                            getTitleSmallPrimaryColorTextStyle()
+                                                .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: context.subTitleColor,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 16.sp),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -131,7 +127,7 @@ class AttendanceDetailsPage extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                width: 130.w,
+                                                width: 140.w,
                                                 padding: EdgeInsets.all(5.r),
                                                 decoration: BoxDecoration(
                                                   color: sessionColor,
@@ -157,7 +153,7 @@ class AttendanceDetailsPage extends StatelessWidget {
                                         }).toList(),
                                       ),
                                     ),
-                                    SizedBox(width: 16.sp),
+                                    SdW_SizeBox_M,
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -194,7 +190,7 @@ class AttendanceDetailsPage extends StatelessWidget {
                                             width: 90.w,
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 8.w,
-                                              vertical: 6.h,
+                                              vertical: 4.h,
                                             ),
                                             margin: const EdgeInsets.only(
                                               bottom: 3,

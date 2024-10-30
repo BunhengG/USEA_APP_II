@@ -66,7 +66,6 @@ class _CustomAccordionACCAState extends State<CustomAccordionACCA>
 
   @override
   Widget build(BuildContext context) {
-    double totalHeight = widget.majors.length * 72.0;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5.0),
       decoration: BoxDecoration(
@@ -79,145 +78,159 @@ class _CustomAccordionACCAState extends State<CustomAccordionACCA>
         mainAxisSize: MainAxisSize.min,
         children: [
           //! Header
-          GestureDetector(
-            onTap: widget.onToggle,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.only(right: 10.0),
-              decoration: BoxDecoration(
-                color: cl_SecondaryColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(rd_MediumRounded),
-                  topRight: const Radius.circular(rd_MediumRounded),
-                  bottomLeft: widget.isExpanded
-                      ? Radius.zero
-                      : const Radius.circular(rd_MediumRounded),
-                  bottomRight: widget.isExpanded
-                      ? Radius.zero
-                      : const Radius.circular(rd_MediumRounded),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 16.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: cl_ThirdColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: widget.isExpanded
-                            ? Radius.zero
-                            : const Radius.circular(rd_MediumRounded),
-                        topLeft: const Radius.circular(rd_MediumRounded),
-                      ),
-                    ),
-                    child: Image(
-                      image: widget.icon,
-                      width: 46.0,
-                      height: 46.0,
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: Text(
-                        widget.title,
-                        style: getListTileTitle(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: cl_PrimaryColor,
-                      borderRadius: BorderRadius.circular(rd_FullRounded),
-                    ),
-                    padding: const EdgeInsets.all(3.0),
-                    child: Icon(
-                      widget.isExpanded ? Icons.expand_less : Icons.expand_more,
-                      color: cl_ThirdColor,
-                      size: 18.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildHeaderList(),
           //! body
           SizeTransition(
             sizeFactor: _heightAnimation,
             axisAlignment: 1.0,
             child: IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 78,
-                    //! Dynamically set height based on the number of children
-                    height: totalHeight,
-                    decoration: const BoxDecoration(
-                      color: cl_ThirdColor, //? Sidebar color
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(rd_MediumRounded),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: widget.majors.map((major) {
-                        final majorName = major.major_name;
-                        return ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 12.0),
-                          title: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: cl_ThirdColor,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    majorName,
-                                    style: getListTileBody(),
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 10.0,
-                                  color: cl_PrimaryColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              SwipeablePageRoute(
-                                builder: (context) => AccaDetailsScreen(
-                                  subjectData: major.subject_data,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
+              child: _buildBody(),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHeaderList() {
+    return GestureDetector(
+      onTap: widget.onToggle,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.only(right: 8.0),
+        decoration: BoxDecoration(
+          color: cl_SecondaryColor,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(rd_MediumRounded),
+            topRight: const Radius.circular(rd_MediumRounded),
+            bottomLeft: widget.isExpanded
+                ? Radius.zero
+                : const Radius.circular(rd_MediumRounded),
+            bottomRight: widget.isExpanded
+                ? Radius.zero
+                : const Radius.circular(rd_MediumRounded),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 16.0,
+              ),
+              decoration: BoxDecoration(
+                color: cl_ThirdColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: widget.isExpanded
+                      ? Radius.zero
+                      : const Radius.circular(rd_MediumRounded),
+                  topLeft: const Radius.circular(rd_MediumRounded),
+                ),
+              ),
+              child: Image(
+                image: widget.icon,
+                width: 46.0,
+                height: 46.0,
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: Text(
+                  widget.title,
+                  style: getListTileTitle(),
+                ),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Container(
+              decoration: BoxDecoration(
+                color: cl_PrimaryColor,
+                borderRadius: BorderRadius.circular(rd_FullRounded),
+              ),
+              padding: const EdgeInsets.all(3.0),
+              child: Icon(
+                widget.isExpanded ? Icons.expand_less : Icons.expand_more,
+                color: cl_ThirdColor,
+                size: 18.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    double itemHeight = 50.0;
+    double totalHeight = widget.majors.length * itemHeight;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 66,
+          height: totalHeight,
+          decoration: const BoxDecoration(
+            color: cl_ThirdColor,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(rd_MediumRounded),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: widget.majors.map((major) {
+              final majorName = major.major_name;
+              return SizedBox(
+                height: itemHeight,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  title: Container(
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: cl_ThirdColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            majorName,
+                            style: getListTileBody(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 11.0,
+                          color: cl_PrimaryColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      SwipeablePageRoute(
+                        builder: (context) => AccaDetailsScreen(
+                          subjectData: major.subject_data,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 }

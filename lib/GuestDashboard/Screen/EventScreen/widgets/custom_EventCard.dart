@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:useaapp_version_2/theme/constants.dart';
 
@@ -41,7 +42,7 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 300.w,
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         color: cl_ThirdColor,
@@ -52,13 +53,14 @@ class EventCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(16.0)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(rd_MediumRounded),
+            ),
             child: CachedNetworkImage(
               imageUrl: imagePath,
-              placeholder: (context, url) => const SizedBox(
-                height: 180.0,
-                child: Center(child: CircularProgressIndicatorWidget()),
+              placeholder: (context, url) => SizedBox(
+                height: 180.h,
+                child: const Center(child: CircularProgressIndicatorWidget()),
               ),
               errorWidget: (context, url, error) => Image.asset(
                 'assets/icon/loading_image.png',
@@ -79,21 +81,23 @@ class EventCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  truncatedTitle,
-                  style: getTitleSmallPrimaryColorTextStyle(),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
                 Container(
                   constraints: const BoxConstraints(maxHeight: 30),
+                  child: Text(
+                    truncatedTitle,
+                    style: getTitleSmallPrimaryColorTextStyle(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  constraints: BoxConstraints(maxHeight: 36.r),
                   child: Text(
                     truncatedBody,
                     style: getBodyMediumTextStyle(),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 16.0),
                 Row(
                   children: [
                     const FaIcon(

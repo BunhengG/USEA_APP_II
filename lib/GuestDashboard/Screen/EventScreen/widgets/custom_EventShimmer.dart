@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:useaapp_version_2/theme/constants.dart';
 
@@ -8,18 +9,19 @@ class EventCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 300.w,
       decoration: BoxDecoration(
         color: cl_ItemBackgroundColor,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(rd_MediumRounded),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Shimmer for the image
           ClipRRect(
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(16.0)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(rd_MediumRounded),
+            ),
             child: Shimmer.fromColors(
               baseColor: cl_ItemBackgroundColor,
               highlightColor: Colors.grey[300]!,
@@ -32,7 +34,7 @@ class EventCardShimmer extends StatelessWidget {
           ),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,7 +44,7 @@ class EventCardShimmer extends StatelessWidget {
                   highlightColor: Colors.grey[300]!,
                   child: Container(
                     height: 14.0,
-                    width: 150.0,
+                    width: 180.0,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(4.0),

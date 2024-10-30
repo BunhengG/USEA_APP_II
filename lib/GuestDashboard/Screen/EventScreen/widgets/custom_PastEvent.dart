@@ -49,7 +49,7 @@ class PastEventState extends State<PastEvent> {
           ),
         ),
         SizedBox(
-          height: 300,
+          height: 310,
           width: double.infinity,
           child: FutureBuilder<List<Event>>(
             future: futureEvents,

@@ -55,7 +55,7 @@ class CurrentEventState extends State<CurrentEvent> {
                   scrollDirection: Axis.horizontal,
                   itemCount: 8,
                   itemBuilder: (context, index) => const Padding(
-                    padding: EdgeInsets.only(left: 16.0),
+                    padding: EdgeInsets.only(left: 12.0),
                     child: EventCardShimmer(),
                   ),
                 );

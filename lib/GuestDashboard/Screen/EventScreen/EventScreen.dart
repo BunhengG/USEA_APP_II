@@ -89,7 +89,7 @@ class _EventScreenState extends State<EventScreen> {
                 ),
                 LiquidPullToRefresh(
                   onRefresh: _handleRefresh,
-                  color: cl_PrimaryColor,
+                  color: cl_defaultMode,
                   backgroundColor: cl_ThirdColor,
                   height: 100.0,
                   child: ListView(

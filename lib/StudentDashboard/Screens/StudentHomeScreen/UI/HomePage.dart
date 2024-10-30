@@ -165,7 +165,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   // Use a loader overlay when refreshing
                   if (isLoading && userData == null && creditData == null)
                     SizedBox(
-                      height: MediaQuery.of(context).size.height - 20,
+                      height: MediaQuery.of(context).size.height - 8.h,
                       child: const Center(
                         child: CircularProgressIndicatorWidget(),
                       ),
@@ -180,7 +180,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           )
                         else
                           buildPlaceholderCard(context, colorMode),
-                        SizedBox(height: 8.h),
+                        // SizedBox(height: 8.h),
                         const CustomGridView(),
                       ],
                     ),

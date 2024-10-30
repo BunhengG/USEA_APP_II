@@ -205,23 +205,23 @@ class CustomCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${totalCredit.toInt()} / ',
+                  '${yourCredit.toInt()} / ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: yourCredit.toInt() == totalCredit.toInt()
+                        ? const Color(0xFF00FF9C)
+                        : const Color(0xFFF3C623),
+                    fontSize: 16.sp,
+                  ),
+                ),
+                Text(
+                  '${totalCredit.toInt()} ',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: cl_ThirdColor,
                     fontSize: 18.sp,
                   ),
                 ),
-                Text(
-                  '${yourCredit.toInt()}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: yourCredit.toInt() == totalCredit.toInt()
-                        ? const Color(0xFF00FF9C)
-                        : const Color(0xFFF3C623),
-                    fontSize: 16,
-                  ),
-                )
               ],
             ),
             circularStrokeCap: CircularStrokeCap.round,

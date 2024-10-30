@@ -122,7 +122,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet>
                     TableRow(
                       children: [
                         _buildHeaderText(context, 'កាលបរិច្ឆេទ'),
-                        _buildHeaderText(context, 'លេខវិក័យបត្រ'),
+                        _buildHeaderText(context, 'វិក័យបត្រ'),
                         Container(
                           margin: EdgeInsets.only(left: 26.r),
                           child: _buildHeaderText(context, 'ទឹកប្រាក់បានបង់'),

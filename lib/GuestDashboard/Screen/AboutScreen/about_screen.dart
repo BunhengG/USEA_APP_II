@@ -102,10 +102,11 @@ class _AboutScreenState extends State<AboutScreen> {
                 final item = aboutList[index];
                 return GestureDetector(
                   onTap: () => navigateToScreen(context, item['title']!),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     padding: const EdgeInsets.only(right: 10.0),
                     decoration: BoxDecoration(
                       color: cl_SecondaryColor,
@@ -113,8 +114,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                     child: Row(
                       children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
+                        Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16.0,
                             vertical: 16.0,
@@ -139,7 +139,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
                               item['title']!.tr,
                               style: getListTileTitle(),
@@ -151,11 +151,11 @@ class _AboutScreenState extends State<AboutScreen> {
                             color: cl_PrimaryColor,
                             borderRadius: BorderRadius.circular(rd_FullRounded),
                           ),
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: const Icon(
                             Icons.arrow_forward_ios,
                             color: cl_ThirdColor,
-                            size: 20.0,
+                            size: 16.0,
                           ),
                         ),
                       ],

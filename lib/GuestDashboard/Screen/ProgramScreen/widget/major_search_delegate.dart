@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:swipeable_page_route/swipeable_page_route.dart';
+import 'package:useaapp_version_2/theme/color_builder.dart';
 import 'package:useaapp_version_2/theme/constants.dart';
 import '../../../../theme/text_style.dart';
 import '../MajorScreens/acca_Details_Screen.dart';
@@ -61,12 +62,14 @@ class MajorSearchDelegate extends SearchDelegate<String> {
     ].where((major) {
       if (major is Major_Data) {
         // Check if it's ProgramACCA data
-        return major.major_name.toLowerCase().contains(query.toLowerCase());
+        return major.major_name.toLowerCase().contains(
+              query.toLowerCase(),
+            );
       } else if (major is Map<String, dynamic>) {
         // Check if it's ProgramData
-        return (major['major_name'] ?? '')
-            .toLowerCase()
-            .contains(query.toLowerCase());
+        return (major['major_name'] ?? '').toLowerCase().contains(
+              query.toLowerCase(),
+            );
       }
       return false;
     }).toList();
@@ -115,19 +118,22 @@ class MajorSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return buildResults(context);
+    return Container(
+      color: context.guestBGColor,
+      child: buildResults(context),
+    );
   }
 
   @override
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theme.of(context);
     return theme.copyWith(
-      appBarTheme: const AppBarTheme(
-        backgroundColor: cl_ThirdColor,
+      appBarTheme: AppBarTheme(
+        backgroundColor: context.guestBGColor,
         shadowColor: cl_PlaceholderColor,
         elevation: 1,
         scrolledUnderElevation: 1,
-        iconTheme: IconThemeData.fallback(),
+        iconTheme: const IconThemeData.fallback(),
         centerTitle: false,
         titleSpacing: -10,
       ),

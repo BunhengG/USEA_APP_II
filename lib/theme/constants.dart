@@ -61,6 +61,18 @@ const ft_Eng = 'font_Poppins';
 const ft_Khmer = 'Mool1';
 const ft_Khmer_cont = 'Battambang';
 
+//? sizedBox
+
+const SdH_SizeBox_S = SizedBox(height: 8.0);
+const SdH_SizeBox_M = SizedBox(height: 16.0);
+const SdH_SizeBox_L = SizedBox(height: 20.0);
+const SdH_SizeBox_XL = SizedBox(height: 26.0);
+
+const SdW_SizeBox_S = SizedBox(width: 8.0);
+const SdW_SizeBox_M = SizedBox(width: 16.0);
+const SdW_SizeBox_L = SizedBox(width: 20.0);
+const SdW_SizeBox_XL = SizedBox(width: 26.0);
+
 //? for switch color
 const BoxDecoration defaultBackground =
     BoxDecoration(gradient: u_BackgroundScaffold);

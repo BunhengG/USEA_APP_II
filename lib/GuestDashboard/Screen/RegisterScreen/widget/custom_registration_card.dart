@@ -18,7 +18,7 @@ class RegistrationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(rd_MediumRounded),
       ),
-      elevation: 2.0,
+      elevation: 1.0,
       child: Padding(
         padding: const EdgeInsets.all(rd_MediumRounded),
         child: Column(
@@ -28,141 +28,133 @@ class RegistrationCard extends StatelessWidget {
               registration['title'],
               style: getTitleKhmerMoolPrimaryColorTextStyle(),
             ),
-            const SizedBox(height: 5.0),
+            SdH_SizeBox_S,
             const Divider(
               thickness: 1,
               color: cl_SecondaryColor,
             ),
-            const SizedBox(height: 8.0),
+            SdH_SizeBox_S,
             for (var detail in registration['details'] ?? [])
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 38,
-                        width: 38,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(rd_FullRounded),
-                          color: Colors.blueAccent.withOpacity(0.2),
-                        ),
-                        child: Image.asset(
-                          'assets/icon/schedule.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          detail['date_title'],
-                          style: getTitleSmallPrimaryColorTextStyle(),
-                          softWrap: true,
-                        ),
-                      ),
-                    ],
+                  _buildIconTextHeader(
+                    'assets/icon/schedule.png',
+                    detail['date_title'],
+                    Colors.blueAccent,
                   ),
-                  const SizedBox(height: 8.0),
+                  SdH_SizeBox_S,
                   for (var education in detail['education_list'] ?? [])
                     Container(
                       margin: const EdgeInsets.only(left: 12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              LottieBuilder.asset('assets/icon/active.json'),
-                              const SizedBox(width: 8),
-                              Text(
-                                education['education_name'],
-                                style: getBodyLargeTextStyle(),
-                              ),
-                            ],
+                          _buildEducationHeader(
+                            education['education_name'],
+                            'assets/icon/active.json',
                           ),
-                          const SizedBox(height: 5),
+                          SdH_SizeBox_S,
                           for (var item in education['list'] ?? [])
-                            Container(
-                              margin: const EdgeInsets.only(left: 6),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const FaIcon(
-                                    FontAwesomeIcons.squareCheck,
-                                    size: 12,
-                                    color: cl_PlaceholderColor,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      item['info'],
-                                      style: getBodyMediumTextStyle()
-                                          .copyWith(fontSize: 13),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          const SizedBox(height: 16.0),
+                            _buildEducationBody(item['info']),
+                          SdH_SizeBox_S,
                         ],
                       ),
                     ),
-                  const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 38,
-                        width: 38,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(rd_FullRounded),
-                          color: Colors.amber.withOpacity(0.2),
-                        ),
-                        child: Image.asset(
-                          'assets/icon/clock.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          detail['time_title'],
-                          style: getTitleSmallPrimaryColorTextStyle(),
-                          softWrap: true,
-                        ),
-                      ),
-                    ],
+                  SdH_SizeBox_S,
+                  _buildIconTextHeader(
+                    'assets/icon/clock.png',
+                    detail['time_title'],
+                    Colors.amber.withOpacity(0.2),
                   ),
-                  const SizedBox(height: 8.0),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 26,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(rd_SmallRounded),
-                      color: cl_PrimaryColor.withOpacity(0.1),
-                    ),
-                    child: Text(
-                      detail['time_detail'].replaceAll('\r\n', '\n'),
-                      style: getBodyMediumTextStyle(),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  SdH_SizeBox_S,
+                  _buildEducationFooter(detail['time_detail']),
                 ],
               ),
-            const SizedBox(height: 16.0),
+            SdH_SizeBox_S,
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildIconTextHeader(String imageAsset, String title, Color bgColor) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 38,
+          width: 38,
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(rd_FullRounded),
+            color: bgColor.withOpacity(0.2),
+          ),
+          child: Image.asset(imageAsset, fit: BoxFit.contain),
+        ),
+        SdW_SizeBox_S,
+        Expanded(
+          child: Text(
+            title,
+            style: getTitleSmallPrimaryColorTextStyle(),
+            softWrap: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEducationHeader(String title, String image) {
+    return Row(
+      children: [
+        LottieBuilder.asset(image),
+        SdW_SizeBox_S,
+        Text(
+          title,
+          style: getBodyLargeTextStyle(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEducationBody(String title) {
+    return Container(
+      margin: const EdgeInsets.only(left: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const FaIcon(
+            FontAwesomeIcons.squareCheck,
+            size: 12,
+            color: cl_PlaceholderColor,
+          ),
+          SdW_SizeBox_S,
+          Expanded(
+            child: Text(
+              title,
+              style: getBodyMediumTextStyle().copyWith(fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEducationFooter(String title) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 26,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(rd_SmallRounded),
+        color: cl_PrimaryColor.withOpacity(0.1),
+      ),
+      child: Text(
+        title.replaceAll('\r\n', '\n'),
+        style: getBodyMediumTextStyle(),
+        textAlign: TextAlign.center,
       ),
     );
   }

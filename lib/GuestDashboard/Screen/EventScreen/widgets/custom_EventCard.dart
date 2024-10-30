@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:useaapp_version_2/theme/constants.dart';
 
-import '../../../../components/circularProgressIndicator.dart';
 import '../../../../theme/text_style.dart';
 
 class EventCard extends StatelessWidget {
@@ -52,87 +52,116 @@ class EventCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(rd_MediumRounded),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: imagePath,
-              placeholder: (context, url) => SizedBox(
-                height: 180.h,
-                child: const Center(child: CircularProgressIndicatorWidget()),
-              ),
-              errorWidget: (context, url, error) => Image.asset(
-                'assets/icon/loading_image.png',
-                height: 180.0,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              fit: BoxFit.cover,
-              height: 180.0,
-              width: double.infinity,
-              fadeInDuration: const Duration(milliseconds: 300),
-              fadeOutDuration: const Duration(milliseconds: 300),
-            ),
-          ),
+          _buildImageHeader(),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  constraints: const BoxConstraints(maxHeight: 30),
-                  child: Text(
-                    truncatedTitle,
-                    style: getTitleSmallPrimaryColorTextStyle(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  constraints: BoxConstraints(maxHeight: 36.r),
-                  child: Text(
-                    truncatedBody,
-                    style: getBodyMediumTextStyle(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.solidCalendarDays,
-                      color: cl_PlaceholderColor,
-                      size: 10.0,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text(
-                      eventDate,
-                      style: getBodyMediumTextStyle().copyWith(
-                        color: cl_PlaceholderColor,
-                        fontSize: 11,
-                      ),
-                    ),
-                    const SizedBox(width: 4.0),
-                    const FaIcon(
-                      FontAwesomeIcons.solidClock,
-                      color: cl_PlaceholderColor,
-                      size: 10.0,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text(
-                      eventTime,
-                      style: getBodyMediumTextStyle().copyWith(
-                        color: cl_PlaceholderColor,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            child: _buildTextBody(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildImageHeader() {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(rd_MediumRounded),
+      ),
+      child: CachedNetworkImage(
+        imageUrl: imagePath,
+        placeholder: (context, url) => SizedBox(
+          height: 180.h,
+          child: Center(
+            child: _buildImageShimmer(),
+          ),
+        ),
+        errorWidget: (context, url, error) => Image.asset(
+          'assets/icon/loading_image.png',
+          height: 180.0,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        fit: BoxFit.cover,
+        height: 180.0,
+        width: double.infinity,
+        fadeInDuration: const Duration(milliseconds: 300),
+        fadeOutDuration: const Duration(milliseconds: 300),
+      ),
+    );
+  }
+
+  Widget _buildTextBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          constraints: const BoxConstraints(maxHeight: 30),
+          child: Text(
+            truncatedTitle,
+            style: getTitleSmallPrimaryColorTextStyle(),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Container(
+          constraints: BoxConstraints(maxHeight: 36.r),
+          child: Text(
+            truncatedBody,
+            style: getBodyMediumTextStyle(),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        _buildDateAndTime()
+      ],
+    );
+  }
+
+  Widget _buildDateAndTime() {
+    return Row(
+      children: [
+        const FaIcon(
+          FontAwesomeIcons.solidCalendarDays,
+          color: cl_PlaceholderColor,
+          size: 10.0,
+        ),
+        const SizedBox(width: 4.0),
+        Text(
+          eventDate,
+          style: getBodyMediumTextStyle().copyWith(
+            color: cl_PlaceholderColor,
+            fontSize: 11,
+          ),
+        ),
+        const SizedBox(width: 4.0),
+        const FaIcon(
+          FontAwesomeIcons.solidClock,
+          color: cl_PlaceholderColor,
+          size: 10.0,
+        ),
+        const SizedBox(width: 4.0),
+        Text(
+          eventTime,
+          style: getBodyMediumTextStyle().copyWith(
+            color: cl_PlaceholderColor,
+            fontSize: 11,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[200]!,
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(rd_MediumRounded),
+          ),
+          color: cl_ThirdColor,
+        ),
       ),
     );
   }

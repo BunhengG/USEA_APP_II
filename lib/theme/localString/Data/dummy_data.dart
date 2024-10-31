@@ -135,7 +135,11 @@ final List<Map<String, dynamic>> gridItemStudent = [
     'title': 'ការបង់ប្រាក់',
     'route': '/payment'
   },
-  {'icon': "assets/icon/job.png", 'title': 'ប្រវត្តិការងារ', 'route': '/job'},
+  {
+    'icon': "assets/icon/job.png",
+    'title': 'ប្រវត្តិការងារ',
+    'route': '/job',
+  },
   {
     'icon': "assets/icon/study.png",
     'title': 'ព័ត៌មានការសិក្សា',

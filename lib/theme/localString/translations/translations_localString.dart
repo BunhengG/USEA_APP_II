@@ -285,6 +285,13 @@ class LocaleString extends Translations {
           // Student Achievement
           'សូមអបអរសាទរ': 'សូមអបអរសាទរ',
           'មិនទាន់បានបញ្ចប់': 'មិនទាន់បានបញ្ចប់',
+          'QR ត្រូវបានរក្សាទុកដោយជោគជ័យ។': 'QR ត្រូវបានរក្សាទុកដោយជោគជ័យ។',
+          'QR ត្រូវបានរក្សាទុកមិនជោគជ័យ។': 'QR ត្រូវបានរក្សាទុកមិនជោគជ័យ។',
+          'បរាជ័យក្នុងការចាប់យក QR Code។': 'បរាជ័យក្នុងការចាប់យក QR Code។',
+          'ការអនុញ្ញាតការផ្ទុកត្រូវបានបដិសេធ':
+              'ការអនុញ្ញាតការផ្ទុកត្រូវបានបដិសេធ',
+          'តម្រូវឱ្យមានការអនុញ្ញាតក្នុងទំហំផ្ទុក ដើម្បីរក្សាទុក QR Code ។':
+              'Storage permission is required to save QR Code.',
 
           // Guardian Login
           'អត្តលេខអាណាព្យាបាល': 'អត្តលេខអាណាព្យាបាល',
@@ -575,6 +582,13 @@ class LocaleString extends Translations {
           // Student Achievement
           'សូមអបអរសាទរ': 'Congratulations',
           'មិនទាន់បានបញ្ចប់': 'Achievement Locked',
+          'QR Code saved successfully.': 'QR ត្រូវបានរក្សាទុកដោយជោគជ័យ។',
+          'QR ត្រូវបានរក្សាទុកមិនជោគជ័យ។': 'QR Code saved unsuccessfully.',
+          'បរាជ័យក្នុងការចាប់យក QR Code។': 'Failed to capture QR Code.',
+          'ការអនុញ្ញាតការផ្ទុកត្រូវបានបដិសេធ':
+              'Storage permission is permanently denied.',
+          'តម្រូវឱ្យមានការអនុញ្ញាតក្នុងទំហំផ្ទុក ដើម្បីរក្សាទុក QR Code ។':
+              'តម្រូវឱ្យមានការអនុញ្ញាតក្នុងទំហំផ្ទុក ដើម្បីរក្សាទុក QR Code ។',
 
           // Guardian Login
           'អត្តលេខអាណាព្យាបាល': 'Guardian ID',

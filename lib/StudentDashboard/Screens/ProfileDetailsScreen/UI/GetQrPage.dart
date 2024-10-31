@@ -56,22 +56,40 @@ class _GetQRPageState extends State<GetQRPage> {
             await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
         if (result['isSuccess']) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('QR Code saved successfully.')),
+            SnackBar(
+              content: Text(
+                'QR ត្រូវបានរក្សាទុកដោយជោគជ័យ។'.tr,
+                style: getTitleMediumTextStyle(),
+              ),
+              backgroundColor: const Color(0xFF06D001),
+            ),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to save QR Code.')),
+            SnackBar(
+              content: Text(
+                'QR ត្រូវបានរក្សាទុកមិនជោគជ័យ។'.tr,
+                style: getTitleMediumTextStyle(),
+              ),
+              backgroundColor: const Color(0xFFF95454),
+            ),
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to capture QR Code.')),
+          SnackBar(
+            content: Text(
+              'បរាជ័យក្នុងការចាប់យក QR Code។'.tr,
+              style: getTitleMediumTextStyle(),
+            ),
+            backgroundColor: const Color(0xFFF95454),
+          ),
         );
       }
     } else if (await Permission.storage.isPermanentlyDenied) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Storage permission is permanently denied.'),
+          content: Text('ការអនុញ្ញាតការផ្ទុកត្រូវបានបដិសេធ'.tr),
           action: SnackBarAction(
             label: 'Settings',
             onPressed: () => openAppSettings(),
@@ -80,8 +98,12 @@ class _GetQRPageState extends State<GetQRPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Storage permission is required to save QR Code.'),
+        SnackBar(
+          content: Text(
+            'តម្រូវឱ្យមានការអនុញ្ញាតក្នុងទំហំផ្ទុក ដើម្បីរក្សាទុក QR Code ។'.tr,
+            style: getTitleMediumTextStyle(),
+          ),
+          backgroundColor: const Color(0xFFF3C623),
         ),
       );
     }
@@ -118,26 +140,19 @@ class _GetQRPageState extends State<GetQRPage> {
           },
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 8,
-            ),
-            child: TextButton(
-              onPressed: () => _captureAndSave(context),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green,
-                textStyle: TextStyle(
-                  fontSize: 18.0.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+          InkWell(
+            onTap: () => _captureAndSave(context),
+            child: Container(
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(rd_SmallRounded),
+                color: Colors.blueAccent,
               ),
               child: Text(
                 'ទាញយក QR'.tr.toUpperCase(),
                 style: getTitleMediumTextStyle().copyWith(
-                  decoration: TextDecoration.underline,
-                  decorationColor: cl_ThirdColor,
+                  color: cl_ThirdColor,
                 ),
               ),
             ),
@@ -146,12 +161,6 @@ class _GetQRPageState extends State<GetQRPage> {
       ),
       body: Stack(
         children: [
-          // Container(
-          //   width: double.infinity,
-          //   decoration: const BoxDecoration(
-          //     gradient: u_BackgroundScaffold,
-          //   ),
-          // ),
           BackgroundContainer(isDarkMode: colorMode),
           Center(
             child: RepaintBoundary(

@@ -229,7 +229,7 @@ class _LoginQRPageState extends State<LoginQRPage>
           InkWell(
             onTap: _toggleFlash,
             child: Container(
-              width: 150,
+              width: 150.w,
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
               decoration: BoxDecoration(
                 color: _isFlashOn ? Colors.grey : Colors.grey[800],
@@ -244,38 +244,43 @@ class _LoginQRPageState extends State<LoginQRPage>
                         : Icons.flashlight_off_rounded,
                     color: cl_ThirdColor,
                   ),
-                  SizedBox(width: 8.w),
+                  const SizedBox(width: 4),
                   const Text(
                     'Flash',
-                    style: TextStyle(color: cl_ThirdColor),
+                    style: TextStyle(
+                      color: cl_ThirdColor,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(width: 20.w),
-
+          SizedBox(width: 16.w),
           // Upload QR button
           InkWell(
             onTap: _pickImageAndScan,
             child: Container(
-              width: 150,
+              width: 150.w,
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
               decoration: BoxDecoration(
                 color: Colors.grey[800],
                 borderRadius: BorderRadius.circular(rd_LargeRounded),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.qr_code_rounded,
                     color: cl_ThirdColor,
                   ),
-                  SizedBox(width: 8.w),
-                  const Text(
+                  SizedBox(width: 4),
+                  Text(
                     'Upload QR',
-                    style: TextStyle(color: cl_ThirdColor),
+                    style: TextStyle(
+                      color: cl_ThirdColor,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),

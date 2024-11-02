@@ -79,171 +79,142 @@ class _ScoresBottomSheetState extends State<ScoresBottomSheet>
       animation: _heightAnimation,
       builder: (context, child) {
         return SizedBox(
-          height:
-              MediaQuery.of(context).size.height * 0.6 * _heightAnimation.value,
+          // height:
+          //     MediaQuery.of(context).size.height * 0.6 * _heightAnimation.value,
+          height: MediaQuery.of(context).size.height * 0.6,
           width: double.infinity,
-          child: SingleChildScrollView(
-            // Added ScrollView
-            child: Column(
-              children: [
-                // Header
-                Column(
-                  children: [
-                    // Drag Handle centered
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          width: 46,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+
+          child: Column(
+            children: [
+              // Header
+              _buildHeader(context),
+              _buildDivider(context),
+              // Scrollable Body
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.scores.length,
+                    itemBuilder: (context, index) {
+                      final score = widget.scores[index];
+
+                      // Split the score and final score values if they contain " / "
+                      final attendanceScores =
+                          _splitScoreString(score.scoreAttendance);
+                      final attendanceFinalScores =
+                          _splitScoreString(score.numberAttendance);
+
+                      final assignmentScores =
+                          _splitScoreString(score.scoreAssignment);
+                      final assignmentFinalScores =
+                          _splitScoreString(score.numberAssignment);
+
+                      final midTermScores =
+                          _splitScoreString(score.scoreMidTerm);
+                      final midTermFinalScores =
+                          _splitScoreString(score.numberMidTerm);
+
+                      final finalScores = _splitScoreString(score.scoreFinal);
+                      final finalFinalScores =
+                          _splitScoreString(score.numberFinal);
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.subjectName,
-                            textAlign: TextAlign.center,
-                            style:
-                                getTitleSmallPrimaryColorTextStyle().copyWith(
-                              color: context.titlePrimaryColor,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 18,
+                              bottom: 8,
+                              left: 16,
+                              right: 16,
+                            ),
+                            child: Text(
+                              score.title.isNotEmpty
+                                  ? score.title
+                                  : 'គ្មានទិន្ន័យ'.tr,
+                              style:
+                                  getTitleSmallPrimaryColorTextStyle().copyWith(
+                                color: context.titlePrimaryColor,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    _buildDivider(context),
-                  ],
-                ),
-                // Scrollable Body
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.scores.length,
-                  itemBuilder: (context, index) {
-                    final score = widget.scores[index];
-
-                    // Split the score and final score values if they contain " / "
-                    final attendanceScores =
-                        _splitScoreString(score.scoreAttendance);
-                    final attendanceFinalScores =
-                        _splitScoreString(score.numberAttendance);
-
-                    final assignmentScores =
-                        _splitScoreString(score.scoreAssignment);
-                    final assignmentFinalScores =
-                        _splitScoreString(score.numberAssignment);
-
-                    final midTermScores = _splitScoreString(score.scoreMidTerm);
-                    final midTermFinalScores =
-                        _splitScoreString(score.numberMidTerm);
-
-                    final finalScores = _splitScoreString(score.scoreFinal);
-                    final finalFinalScores =
-                        _splitScoreString(score.numberFinal);
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 18,
-                            bottom: 8,
-                            left: 16,
-                            right: 16,
-                          ),
-                          child: Text(
-                            score.title.isNotEmpty
-                                ? score.title
-                                : 'គ្មានទិន្ន័យ'.tr,
-                            style:
-                                getTitleSmallPrimaryColorTextStyle().copyWith(
-                              color: context.titlePrimaryColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        //COMMENT: ******************************** Header Bottom Sheet ********************************
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'លក្ខណៈវិនិច្ឆ័យ'.tr,
+                          SizedBox(height: 8.h),
+                          //COMMENT: ******************************** Header Bottom Sheet ********************************
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'លក្ខណៈវិនិច្ឆ័យ'.tr,
+                                    style: getBodyLargeTextStyle().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: context.subTitleColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'ពិន្ទុជាក់ស្ដែង'.tr,
                                   style: getBodyLargeTextStyle().copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: context.subTitleColor,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                'ពិន្ទុជាក់ស្ដែង'.tr,
-                                style: getBodyLargeTextStyle().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: context.subTitleColor,
+                                const SizedBox(width: 38),
+                                Text(
+                                  'ពិន្ទុសរុប'.tr,
+                                  style: getBodyLargeTextStyle().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: context.subTitleColor,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 38),
-                              Text(
-                                'ពិន្ទុសរុប'.tr,
-                                style: getBodyLargeTextStyle().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: context.subTitleColor,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                            ],
+                                const SizedBox(width: 12),
+                              ],
+                            ),
                           ),
-                        ),
-                        //COMMENT: ******************************** Body Bottom Sheet ********************************
-                        buildScoreRow(
-                          'វត្តមាន'.tr,
-                          attendanceScores[0],
-                          attendanceScores[1],
-                          attendanceFinalScores[0],
-                          attendanceFinalScores[1],
-                          context,
-                        ),
-                        buildScoreRow(
-                          'សមិទ្ធិផល'.tr,
-                          assignmentScores[0],
-                          assignmentScores[1],
-                          assignmentFinalScores[0],
-                          assignmentFinalScores[1],
-                          context,
-                        ),
-                        buildScoreRow(
-                          'ពាក់កណ្ដាលឆមាស'.tr,
-                          midTermScores[0],
-                          midTermScores[1],
-                          midTermFinalScores[0],
-                          midTermFinalScores[1],
-                          context,
-                        ),
-                        buildScoreRow(
-                          'ប្រលងបញ្ចប់ឆមាស'.tr,
-                          finalScores[0],
-                          finalScores[1],
-                          finalFinalScores[0],
-                          finalFinalScores[1],
-                          context,
-                        ),
-                      ],
-                    );
-                  },
+                          //COMMENT: ******************************** Body Bottom Sheet ********************************
+                          buildScoreRow(
+                            'វត្តមាន'.tr,
+                            attendanceScores[0],
+                            attendanceScores[1],
+                            attendanceFinalScores[0],
+                            attendanceFinalScores[1],
+                            context,
+                          ),
+                          buildScoreRow(
+                            'សមិទ្ធិផល'.tr,
+                            assignmentScores[0],
+                            assignmentScores[1],
+                            assignmentFinalScores[0],
+                            assignmentFinalScores[1],
+                            context,
+                          ),
+                          buildScoreRow(
+                            'ពាក់កណ្ដាលឆមាស'.tr,
+                            midTermScores[0],
+                            midTermScores[1],
+                            midTermFinalScores[0],
+                            midTermFinalScores[1],
+                            context,
+                          ),
+                          buildScoreRow(
+                            'ប្រលងបញ្ចប់ឆមាស'.tr,
+                            finalScores[0],
+                            finalScores[1],
+                            finalFinalScores[0],
+                            finalFinalScores[1],
+                            context,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -254,6 +225,45 @@ class _ScoresBottomSheetState extends State<ScoresBottomSheet>
     return Divider(
       height: 1.5,
       color: context.secondaryColoDarkMode,
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Drag Handle centered
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: 46,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.subjectName,
+                textAlign: TextAlign.center,
+                style: getTitleSmallPrimaryColorTextStyle().copyWith(
+                  color: context.titlePrimaryColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

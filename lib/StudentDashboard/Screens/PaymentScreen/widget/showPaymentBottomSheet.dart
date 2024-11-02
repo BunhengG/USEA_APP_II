@@ -82,75 +82,88 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Fixed Drag Handle
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 8),
-                    width: 36.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(rd_SmallRounded),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        width: 36.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(rd_SmallRounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'ឆ្នាំទី​ '.tr.toUpperCase() + widget.year,
+                          style: getTitleLargePrimaryColorTextStyle().copyWith(
+                            color: context.titlePrimaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    height: 1.h,
+                    color: cl_SecondaryColor,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8,
+                    ),
+                    child: Table(
+                      defaultColumnWidth: FixedColumnWidth(90.w),
+                      children: [
+                        TableRow(
+                          children: [
+                            _buildHeaderText(context, 'កាលបរិច្ឆេទ'),
+                            _buildHeaderText(context, 'វិក័យបត្រ'),
+                            Container(
+                              margin: const EdgeInsets.only(left: 30),
+                              child:
+                                  _buildHeaderText(context, 'ទឹកប្រាក់បានបង់'),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 24),
+                              child:
+                                  _buildHeaderText(context, 'ទឹកប្រាក់នៅសល់'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'ឆ្នាំទី​ '.tr.toUpperCase() + widget.year,
-                      style: getTitleLargePrimaryColorTextStyle().copyWith(
-                        color: context.titlePrimaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 1.h,
-                color: cl_SecondaryColor,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Table(
-                  defaultColumnWidth: FixedColumnWidth(90.w),
-                  children: [
-                    TableRow(
-                      children: [
-                        _buildHeaderText(context, 'កាលបរិច្ឆេទ'),
-                        _buildHeaderText(context, 'វិក័យបត្រ'),
-                        Container(
-                          margin: EdgeInsets.only(left: 26.r),
-                          child: _buildHeaderText(context, 'ទឹកប្រាក់បានបង់'),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 16.r),
-                          child: _buildHeaderText(context, 'ទឹកប្រាក់នៅសល់'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // Ensure the ListView is scrollable within the available space
+
               Expanded(
                 child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: widget.invoices.length,
                   itemBuilder: (context, index) {
                     PaymentClass invoice = widget.invoices[index];
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4.0.r),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 8,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: Table(
-                              defaultColumnWidth: FixedColumnWidth(90.w),
+                              defaultColumnWidth: const FixedColumnWidth(90),
                               children: [
                                 TableRow(
                                   children: [
@@ -163,14 +176,14 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet>
                                       invoice.invoiceNumber,
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(left: 26.r),
+                                      margin: const EdgeInsets.only(left: 26),
                                       child: _buildBodyText(
                                         context,
                                         '\$ ${invoice.amountPaid}',
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(left: 16.r),
+                                      margin: const EdgeInsets.only(left: 16),
                                       child: _buildBodyText(
                                         context,
                                         '\$ ${invoice.remainingAmount}',
@@ -209,7 +222,7 @@ Widget _buildBodyText(BuildContext context, String text) {
   return Text(
     text,
     style: TextStyle(
-      fontSize: 14.sp,
+      fontSize: 12.sp,
       color: context.subTitleColor,
     ),
   );

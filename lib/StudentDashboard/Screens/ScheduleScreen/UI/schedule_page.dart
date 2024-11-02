@@ -125,7 +125,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   slivers: [
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(10),
                         child: CustomCalendar(
                           selectedDate: selectedDate,
                           onDateSelected: _onDateSelected,
@@ -134,7 +134,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'កាលវិភាគសិក្សា'.tr,
                           style: getTitleMediumTextStyle(),
@@ -176,7 +176,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     else if (state is ScheduleError)
                       const SliverToBoxAdapter(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: EdgeInsets.only(top: 16.0),
                           child: Center(
                             child: Text(
                               'No schedule Today.',
@@ -219,7 +219,7 @@ class _SchedulePageState extends State<SchedulePage> {
         (context, index) {
           final item = filteredSchedule[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4),
               decoration: BoxDecoration(

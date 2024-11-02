@@ -197,7 +197,7 @@ class _PaymentPageState extends State<PaymentPage> {
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           children:
               paymentData.map((study) => _buildPayStudyCard(study)).toList(),
@@ -213,9 +213,9 @@ class _PaymentPageState extends State<PaymentPage> {
         borderRadius: BorderRadius.circular(rd_MediumRounded),
         gradient: gradient,
       ),
-      width: 340.w,
-      height: 240.h,
-      margin: EdgeInsets.only(right: 8.r),
+      width: 340,
+      height: 220,
+      margin: EdgeInsets.only(right: 5.r),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -229,7 +229,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: cl_ThirdColor,
                   ),
                 ),
                 Builder(
@@ -253,11 +253,11 @@ class _PaymentPageState extends State<PaymentPage> {
                           borderRadius: BorderRadius.circular(rd_LargeRounded),
                           color: Colors.white24,
                         ),
-                        padding: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(5),
                         child: const Icon(
                           Icons.remove_red_eye,
                           color: Colors.white,
-                          size: 20,
+                          size: 24,
                         ),
                       ),
                     );
@@ -266,7 +266,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 'ការបង់ថ្លៃឈ្នួលសិក្សា'.tr,
                 style: getBodyMediumThirdColorTextStyle(),
@@ -309,10 +309,10 @@ class _PaymentPageState extends State<PaymentPage> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(rd_SmallRounded),
             gradient: gradient,
           ),
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -320,7 +320,7 @@ class _PaymentPageState extends State<PaymentPage> {
             '\$ ${study.remaining}',
             style: const TextStyle(
               fontSize: 14,
-              color: Colors.white,
+              color: cl_ThirdColor,
               fontWeight: FontWeight.bold,
             ),
           ),

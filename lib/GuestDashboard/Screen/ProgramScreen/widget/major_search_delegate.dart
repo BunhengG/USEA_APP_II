@@ -57,7 +57,8 @@ class MajorSearchDelegate extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
     final results = [
       ...majorData.expand(
-          (faculty) => faculty['faculty_data']['major_name'] as List<dynamic>),
+        (faculty) => faculty['faculty_data']['major_name'] as List<dynamic>,
+      ),
       ...accaData.facultyData.expand((faculty) => faculty.major_data)
     ].where((major) {
       if (major is Major_Data) {
@@ -83,6 +84,7 @@ class MajorSearchDelegate extends SearchDelegate<String> {
         final isAcca = major is Major_Data;
 
         return ListTile(
+          selectedColor: cl_PlaceholderColor_Mode_38,
           title: Text(
             isAcca ? major.major_name : major['major_name'] ?? 'Unknown',
             style: getListTileTitle(),
@@ -142,6 +144,7 @@ class MajorSearchDelegate extends SearchDelegate<String> {
         border: InputBorder.none,
         fillColor: Colors.transparent,
         filled: true,
+        focusColor: cl_PrimaryColor,
         hintStyle: getBodyLargeTextStyle(),
         labelStyle: getBodyLargeTextStyle(),
       ),
@@ -152,10 +155,5 @@ class MajorSearchDelegate extends SearchDelegate<String> {
   String get searchFieldLabel => '\t\tស្វែងរក'.tr;
 
   @override
-  TextStyle? get searchFieldStyle => const TextStyle(
-        fontSize: 14,
-        color: cl_TextColor,
-        fontWeight: FontWeight.bold,
-        fontFamily: ft_Khmer_cont,
-      );
+  TextStyle? get searchFieldStyle => getBodyLargeTextStyle();
 }

@@ -37,13 +37,13 @@ class CustomCalendar extends StatelessWidget {
         onDaySelected: (selectedDay, focusedDay) {
           onDateSelected(selectedDay);
         },
-        rowHeight: 50.h,
+        rowHeight: 42,
         calendarStyle: CalendarStyle(
-          cellMargin: EdgeInsets.only(
-            top: 10.r,
-            bottom: 0.r,
-            left: 5.r,
-            right: 5.r,
+          cellMargin: const EdgeInsets.only(
+            top: 8,
+            bottom: 0,
+            left: 5,
+            right: 5,
           ),
           todayDecoration: BoxDecoration(
             shape: BoxShape.rectangle,
@@ -87,8 +87,8 @@ class CustomCalendar extends StatelessWidget {
           defaultBuilder: (context, day, focusedDay) {
             bool isSunday = day.weekday == DateTime.sunday;
             return Container(
-              height: 40.h,
-              margin: EdgeInsets.symmetric(vertical: 0.r, horizontal: 5.r),
+              height: 36.h,
+              margin: EdgeInsets.symmetric(horizontal: 5.r),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: isSameDay(day, selectedDate)
@@ -121,8 +121,8 @@ class CustomCalendar extends StatelessWidget {
           // Handle tapped days not in the current month
           outsideBuilder: (context, day, focusedDay) {
             return Container(
-              height: 40.h,
-              margin: EdgeInsets.symmetric(vertical: 0.r, horizontal: 5.r),
+              height: 36.h,
+              margin: EdgeInsets.symmetric(horizontal: 5.r),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: context.textNextMonthDateColor,

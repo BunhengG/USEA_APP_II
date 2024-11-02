@@ -34,13 +34,13 @@ class CustomCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          padding: EdgeInsets.only(bottom: 26.r),
+          padding: const EdgeInsets.only(bottom: 24),
           height: cardHeight * 0.3,
           width: double.infinity,
           child: Stack(
             children: [
               Container(
-                padding: EdgeInsets.all(16.0.r),
+                padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(rd_MediumRounded),
                   color: context.colorDarkMode,
@@ -111,13 +111,14 @@ class CustomCard extends StatelessWidget {
                                     style:
                                         getTitleKhmerMoolPrimaryColorTextStyle()
                                             .copyWith(
+                                      fontSize: 16,
                                       color: context.titleColor,
                                     ),
                                   ),
                                   Text(
                                     userData.nameEn.toUpperCase(),
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      // fontSize: 14,
                                       color: context.titleColor,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: ft_Eng,
@@ -132,7 +133,7 @@ class CustomCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.10.h,
+                      height: MediaQuery.of(context).size.height * 0.14,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -140,11 +141,11 @@ class CustomCard extends StatelessWidget {
                           Text.rich(
                             TextSpan(
                               children: [
-                                WidgetSpan(
+                                const WidgetSpan(
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0.r),
-                                    child: const Icon(
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    child: Icon(
                                       Icons.circle,
                                       size: 18,
                                       color: Color(0xFFF4F6FF),
@@ -165,8 +166,8 @@ class CustomCard extends StatelessWidget {
                               children: [
                                 WidgetSpan(
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0.r),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0),
                                     child: Icon(
                                       Icons.circle,
                                       size: 18,
@@ -195,8 +196,8 @@ class CustomCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: cardHeight * 0.090,
-          right: 20.r,
+          top: cardHeight * 0.085,
+          right: 20,
           child: CircularPercentIndicator(
             radius: 65.0,
             lineWidth: 18.0,
@@ -207,19 +208,19 @@ class CustomCard extends StatelessWidget {
                 Text(
                   '${yourCredit.toInt()} / ',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
                     color: yourCredit.toInt() == totalCredit.toInt()
                         ? const Color(0xFF00FF9C)
                         : const Color(0xFFF3C623),
-                    fontSize: 16.sp,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   '${totalCredit.toInt()} ',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: cl_ThirdColor,
-                    fontSize: 18.sp,
+                    fontSize: 14.sp,
                   ),
                 ),
               ],

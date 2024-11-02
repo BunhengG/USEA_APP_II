@@ -80,98 +80,111 @@ class _AttendanceBottomSheetState extends State<AttendanceBottomSheet>
       builder: (context, child) {
         return SizedBox(
           width: double.infinity,
-          height:
-              MediaQuery.of(context).size.height * 0.4 * _heightAnimation.value,
-          child: SingleChildScrollView(
-            // Add this line
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Drag Handle centered
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      width: 46,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+          // height:
+          //     MediaQuery.of(context).size.height * 0.4 * _heightAnimation.value,
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Fixed Header
+              _buildHeader(context),
+              _buildDivider(context),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  // Add this line
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 26.0,
+                      horizontal: 26,
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        textAlign: TextAlign.center,
-                        widget.subjectName,
-                        style: getTitleSmallPrimaryColorTextStyle()
-                            .copyWith(color: context.titlePrimaryColor),
-                      ),
-                    ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.attendance.title,
+                          style: getTitleSmallPrimaryColorTextStyle()
+                              .copyWith(color: context.titlePrimaryColor),
+                        ),
+                        SizedBox(height: 20.sp),
+                        buildAttendanceRow(
+                          context,
+                          'អវត្តមាន'.tr,
+                          widget.attendance.attendanceA,
+                          valueColor: Colors.red,
+                        ),
+                        _buildDivider(context),
+                        SizedBox(height: 18.sp),
+                        buildAttendanceRow(
+                          context,
+                          'សុំច្បាប់'.tr,
+                          widget.attendance.attendancePm,
+                          valueColor: Colors.orange,
+                        ),
+                        _buildDivider(context),
+                        SizedBox(height: 18.sp),
+                        buildAttendanceRow(
+                          context,
+                          'យឺត'.tr,
+                          widget.attendance.attendanceAl,
+                          valueColor: Colors.blue,
+                        ),
+                        _buildDivider(context),
+                        SizedBox(height: 18.sp),
+                        buildAttendanceRow(
+                          context,
+                          'វត្តមាន\t'.tr,
+                          widget.attendance.attendancePs,
+                          valueColor:
+                              colorMode ? Colors.blue[700] : Colors.blue[900],
+                        ),
+                        _buildDivider(context),
+                      ],
+                    ),
                   ),
                 ),
-                _buildDivider(context),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 26.0,
-                    horizontal: 26,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.attendance.title,
-                        style: getTitleSmallPrimaryColorTextStyle()
-                            .copyWith(color: context.titlePrimaryColor),
-                      ),
-                      SizedBox(height: 20.sp),
-                      buildAttendanceRow(
-                        context,
-                        'អវត្តមាន'.tr,
-                        widget.attendance.attendanceA,
-                        valueColor: Colors.red,
-                      ),
-                      _buildDivider(context),
-                      SizedBox(height: 18.sp),
-                      buildAttendanceRow(
-                        context,
-                        'សុំច្បាប់'.tr,
-                        widget.attendance.attendancePm,
-                        valueColor: Colors.orange,
-                      ),
-                      _buildDivider(context),
-                      SizedBox(height: 18.sp),
-                      buildAttendanceRow(
-                        context,
-                        'យឺត'.tr,
-                        widget.attendance.attendanceAl,
-                        valueColor: Colors.blue,
-                      ),
-                      _buildDivider(context),
-                      SizedBox(height: 18.sp),
-                      buildAttendanceRow(
-                        context,
-                        'វត្តមាន\t'.tr,
-                        widget.attendance.attendancePs,
-                        valueColor:
-                            colorMode ? Colors.blue[700] : Colors.blue[900],
-                      ),
-                      _buildDivider(context),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      children: [
+        // Drag Handle centered
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: 46,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[400],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                widget.subjectName,
+                style: getTitleSmallPrimaryColorTextStyle()
+                    .copyWith(color: context.titlePrimaryColor),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

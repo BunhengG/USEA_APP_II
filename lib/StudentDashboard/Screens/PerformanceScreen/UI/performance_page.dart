@@ -290,12 +290,13 @@ class _PerformanceViewState extends State<PerformanceView>
                     style: getTitleSmallPrimaryColorTextStyle()
                         .copyWith(color: context.titlePrimaryColor),
                   ),
-                  SizedBox(width: 44.w),
+                  SizedBox(width: 36.w),
                   Text(
                     'ពិន្ទុ'.tr,
                     style: getTitleSmallPrimaryColorTextStyle()
                         .copyWith(color: context.titlePrimaryColor),
                   ),
+                  SizedBox(width: 8.w),
                 ],
               ),
             ),
@@ -303,7 +304,6 @@ class _PerformanceViewState extends State<PerformanceView>
           const SizedBox(height: 10),
           //COMMENT: ******************************** Body ********************************
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: semester.subjects.map((subject) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -342,6 +342,7 @@ class _PerformanceViewState extends State<PerformanceView>
                         }
                       },
                       child: Container(
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -361,11 +362,12 @@ class _PerformanceViewState extends State<PerformanceView>
                                 ? const Color(0xFF4DC739)
                                 : Colors.grey,
                             fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 8.w),
                     InkWell(
                       onTap: () {
                         final backgroundColor =
@@ -381,6 +383,7 @@ class _PerformanceViewState extends State<PerformanceView>
                         );
                       },
                       child: Container(
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -398,6 +401,7 @@ class _PerformanceViewState extends State<PerformanceView>
                                 ? const Color(0xFF3961C7)
                                 : Colors.grey,
                             fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),

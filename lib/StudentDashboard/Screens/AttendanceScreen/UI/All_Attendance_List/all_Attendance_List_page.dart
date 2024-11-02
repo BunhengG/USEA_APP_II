@@ -379,7 +379,7 @@ class __CheckAllAttendanceViewState extends State<_CheckAllAttendanceView>
       ),
       margin: EdgeInsets.all(2.0.sp),
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(2.0),
         child: Center(
           child: Text(
             textAlign: TextAlign.center,

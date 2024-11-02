@@ -229,7 +229,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       isScrollControlled: true,
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.7.h,
+          heightFactor: 0.5.h,
           child: Stack(
             children: [
               BackdropFilter(

@@ -122,19 +122,19 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet>
                       vertical: 8,
                     ),
                     child: Table(
-                      defaultColumnWidth: FixedColumnWidth(90.w),
+                      defaultColumnWidth: const FixedColumnWidth(90),
                       children: [
                         TableRow(
                           children: [
                             _buildHeaderText(context, 'កាលបរិច្ឆេទ'),
                             _buildHeaderText(context, 'វិក័យបត្រ'),
                             Container(
-                              margin: const EdgeInsets.only(left: 30),
+                              margin: const EdgeInsets.only(left: 28),
                               child:
                                   _buildHeaderText(context, 'ទឹកប្រាក់បានបង់'),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 24),
+                              margin: const EdgeInsets.only(left: 16),
                               child:
                                   _buildHeaderText(context, 'ទឹកប្រាក់នៅសល់'),
                             ),

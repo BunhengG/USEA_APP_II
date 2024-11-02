@@ -205,7 +205,7 @@ class _JobPageState extends State<JobPage> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
-        height: 300.h,
+        height: 280.h,
         decoration: BoxDecoration(
           color: context.bgThirdDarkMode,
           borderRadius:

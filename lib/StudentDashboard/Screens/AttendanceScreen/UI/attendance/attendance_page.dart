@@ -434,6 +434,7 @@ class _AttendanceViewState extends State<AttendanceView> {
         padding: const EdgeInsets.all(4.0),
         child: Center(
           child: Text(
+            textAlign: TextAlign.center,
             value.toString(),
             style: TextStyle(
               fontSize: 14,

@@ -250,7 +250,7 @@ class _StudyInfoPageState extends State<StudyInfoPage> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
-        height: 340.h,
+        height: 300.h,
         decoration: BoxDecoration(
           color: context.bgThirdDarkMode,
           borderRadius: BorderRadius.circular(16.0),

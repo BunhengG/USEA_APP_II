@@ -16,7 +16,7 @@ class ShimmerLoading extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 8.0,
-              horizontal: 8.0,
+              horizontal: 4.0,
             ),
             child: Container(
               padding: const EdgeInsets.all(8),

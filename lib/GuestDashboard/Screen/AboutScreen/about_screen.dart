@@ -117,7 +117,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16.0,
-                            vertical: 16.0,
+                            vertical: 18.0,
                           ),
                           decoration: const BoxDecoration(
                             color: cl_ThirdColor,
@@ -128,8 +128,8 @@ class _AboutScreenState extends State<AboutScreen> {
                           ),
                           child: CachedNetworkImage(
                             imageUrl: item['icon']!,
-                            width: 36.0,
-                            height: 36.0,
+                            width: 46.0,
+                            height: 46.0,
                             fit: BoxFit.cover,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicatorWidget(),

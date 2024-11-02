@@ -213,8 +213,8 @@ class _PaymentPageState extends State<PaymentPage> {
         borderRadius: BorderRadius.circular(rd_MediumRounded),
         gradient: gradient,
       ),
-      width: 340,
-      height: 220,
+      width: 350.w,
+      height: 220.h,
       margin: EdgeInsets.only(right: 5.r),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -96,7 +96,7 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       backgroundColor: context.guestBGColor,
       appBar: MultiAppBar(
-        title: 'ទំនាក់ទំនង',
+        title: 'ទំនាក់ទំនង'.tr,
         onBackButtonPressed: () {
           Navigator.pop(context);
         },
@@ -203,7 +203,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               width: 75,
                               height: 5,
                               decoration: BoxDecoration(
-                                color: Colors.grey[100],
+                                color: cl_ThirdColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),

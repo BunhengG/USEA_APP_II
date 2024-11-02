@@ -23,7 +23,7 @@ class CustomCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorMode = isDarkMode(context);
     return Container(
-      padding: EdgeInsets.all(14.r),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: context.bgThirdDarkMode,
         borderRadius: const BorderRadius.all(Radius.circular(rd_MediumRounded)),
@@ -37,7 +37,7 @@ class CustomCalendar extends StatelessWidget {
         onDaySelected: (selectedDay, focusedDay) {
           onDateSelected(selectedDay);
         },
-        rowHeight: 42,
+        rowHeight: 50,
         calendarStyle: CalendarStyle(
           cellMargin: const EdgeInsets.only(
             top: 8,
@@ -56,9 +56,9 @@ class CustomCalendar extends StatelessWidget {
             color: context.activeSelectScheduleDarkMode,
             borderRadius: BorderRadius.circular(rd_SmallRounded),
           ),
-          selectedTextStyle: TextStyle(
+          selectedTextStyle: const TextStyle(
             color: cl_ThirdColor,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -78,7 +78,7 @@ class CustomCalendar extends StatelessWidget {
           rightChevronIcon:
               Icon(Icons.chevron_right, color: context.titlePrimaryColor),
           titleTextStyle: TextStyle(
-            fontSize: 18.sp,
+            fontSize: 18,
             color: context.titlePrimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -87,7 +87,7 @@ class CustomCalendar extends StatelessWidget {
           defaultBuilder: (context, day, focusedDay) {
             bool isSunday = day.weekday == DateTime.sunday;
             return Container(
-              height: 36.h,
+              height: 40,
               margin: EdgeInsets.symmetric(horizontal: 5.r),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -104,7 +104,7 @@ class CustomCalendar extends StatelessWidget {
                 child: Text(
                   '${day.day}',
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 14,
                     color: isSameDay(day, selectedDate)
                         ? cl_ThirdColor
                         : isSunday
@@ -121,7 +121,7 @@ class CustomCalendar extends StatelessWidget {
           // Handle tapped days not in the current month
           outsideBuilder: (context, day, focusedDay) {
             return Container(
-              height: 36.h,
+              height: 40,
               margin: EdgeInsets.symmetric(horizontal: 5.r),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -131,7 +131,10 @@ class CustomCalendar extends StatelessWidget {
               child: Center(
                 child: Text(
                   '${day.day}',
-                  style: TextStyle(color: context.textDecColor),
+                  style: TextStyle(
+                    color: context.textDecColor,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             );

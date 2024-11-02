@@ -30,7 +30,7 @@ class ShimmerVideoListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(rd_MediumRounded),
               child: Container(
                 width: double.infinity,
-                height: 180,
+                height: 250,
                 color: cl_ThirdColor,
               ),
             ),

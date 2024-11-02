@@ -39,7 +39,7 @@ class VideoListItem extends StatelessWidget {
               child: Image.network(
                 video.youtube_thumbnail,
                 width: double.infinity,
-                height: 180,
+                height: 250,
                 fit: BoxFit.cover,
               ),
             ),

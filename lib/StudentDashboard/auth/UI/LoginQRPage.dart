@@ -6,6 +6,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -46,7 +47,7 @@ class _LoginQRPageState extends State<LoginQRPage>
       vsync: this,
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.06).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -188,9 +189,9 @@ class _LoginQRPageState extends State<LoginQRPage>
 
   Widget _buildBackButton() {
     return Positioned(
-      top: 40.h,
-      left: 120.w,
-      right: 8.w,
+      top: 40,
+      left: 100,
+      right: 16,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,10 +205,10 @@ class _LoginQRPageState extends State<LoginQRPage>
             ),
           ),
           IconButton(
-            icon: const Icon(
-              Icons.close,
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
               color: cl_ThirdColor,
-              size: 24,
+              size: 26,
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -218,7 +219,7 @@ class _LoginQRPageState extends State<LoginQRPage>
 
   Widget _buildFlashlightAndUploadButton() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16.h),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(rd_LargeRounded),
       ),

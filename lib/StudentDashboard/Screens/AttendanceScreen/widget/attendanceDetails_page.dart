@@ -25,7 +25,7 @@ class AttendanceDetailsPage extends StatelessWidget {
         ),
         title: Text(
           subject.name,
-          style: getTitleMediumTextStyle(),
+          style: getTitleMediumTextStyle().copyWith(fontSize: 15.sp),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           softWrap: false,

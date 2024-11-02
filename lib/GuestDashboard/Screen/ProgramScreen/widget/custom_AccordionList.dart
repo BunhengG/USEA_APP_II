@@ -189,7 +189,7 @@ class _CustomAccordionState extends State<CustomAccordion>
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                   title: Container(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: cl_ThirdColor,

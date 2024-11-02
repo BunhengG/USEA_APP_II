@@ -103,7 +103,8 @@ class _FAQScreenState extends State<FAQScreen> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   faqs[index].answer,
-                                  style: getTitleMediumPrimaryColorTextStyle(),
+                                  style: getTitleMediumPrimaryColorTextStyle()
+                                      .copyWith(fontSize: 16),
                                 ),
                               ),
                             ],

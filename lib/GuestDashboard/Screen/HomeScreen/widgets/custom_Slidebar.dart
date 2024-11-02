@@ -64,7 +64,7 @@ class _CustomSlidebarState extends State<CustomSlidebar> {
       children: [
         if (isLoading)
           Container(
-            height: 200,
+            height: 250,
             width: double.infinity,
             margin: const EdgeInsets.only(left: 8),
             child: buildShimmer(),
@@ -79,7 +79,7 @@ class _CustomSlidebarState extends State<CustomSlidebar> {
                     return buildImage(image);
                   },
                   options: CarouselOptions(
-                    height: 200.0,
+                    height: 250.0,
                     viewportFraction: 1.0,
                     autoPlay: true,
                     enlargeCenterPage: true,
@@ -138,7 +138,7 @@ class _CustomSlidebarState extends State<CustomSlidebar> {
       );
 
   Widget buildShimmer() => SizedBox(
-        height: 200,
+        height: 250,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 3,
